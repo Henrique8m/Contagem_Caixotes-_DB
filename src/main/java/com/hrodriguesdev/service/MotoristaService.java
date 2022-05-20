@@ -26,9 +26,8 @@ public class MotoristaService {
 	}
 
 	public Boolean addMotorista(Motorista motorista) {
-		Motorista save = repository.save(motorista);		
-		//return repository.findById(save.getId())).isPresent();
-		return true;
+			
+		return repository.save(motorista);	
 	}
 	
 	public Boolean editMotorista(ObservableList<Pesagem> obs, Long id) {
@@ -100,6 +99,11 @@ public class MotoristaService {
 
 	public List<Motorista> findAll() {
 		return repository.findAll();
+	}
+
+	public Boolean updateMotorista(Long idMotorista) {
+		return repository.update(idMotorista);
+		
 	}
 
 

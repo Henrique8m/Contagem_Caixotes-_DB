@@ -1,6 +1,7 @@
 package com.hrodriguesdev.db;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -15,23 +16,27 @@ public class RepositoryDb {
 	Connection conn = null;
 	Statement st = null;
 	ResultSet rs = null;
+	PreparedStatement pst = null;
 	
 	public List<Motorista> getMotorista(){	
 		
 		return new ArrayList<>();
 	}
 		
-
-		
-
 	public Motorista findById(Long id) {
 		conn = DB.getConnection();	
-		int idint = Integer.parseInt(String.valueOf(id) );
 		Motorista moto = new Motorista();	
 		selectFronMotorista();
 		try {
-			if( rs.absolute(idint) ) 
-				moto = augumaCoisa(rs);
+			
+			while (rs.next()) 
+				if( rs.getLong("id") == id) {
+					moto = augumaCoisa(rs);
+					DB.closeResultSet(rs);
+					DB.closeStatement(st);	
+					return moto;
+				}
+			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -43,13 +48,9 @@ public class RepositoryDb {
 	}
 
 
-
-
-
-
 	public List<Motorista> getByFila(Boolean fila) {
 		List<Motorista> list = new ArrayList<>();
-		
+		//UPDATE `carvaodb`.`tb_motorista` SET `fila` = '0' WHERE (`id` = '3');
 		
 		try {
 			conn = DB.getConnection();			
@@ -58,7 +59,8 @@ public class RepositoryDb {
 			
 			
 			while (rs.next()) 
-				list.add(augumaCoisa(rs));
+				if( rs.getBoolean("fila") == true)
+					list.add(augumaCoisa(rs));
 				
 		}
 		catch (SQLException e) {
@@ -76,13 +78,54 @@ public class RepositoryDb {
 		return list;
 	}
 
-	public Motorista save(Motorista motorista) {
-		// TODO Auto-generated method stub
-		return null;
+	public Boolean save(Motorista motorista) {
+		boolean ok = false;
+		Long cnh = 0l;
+		if(motorista.getCnh()!=null) cnh = motorista.getCnh();
+		
+		try {
+			conn = DB.getConnection();
+			pst = conn.prepareStatement("INSERT INTO tb_motorista "
+					+ "(cidade, cnh, data, estado, fila, hora, name, phone, placa) "
+					+ "VALUES "
+					+ "(?, ?, ?, ?, ?, ?, ?, ?, ?)",
+					Statement.RETURN_GENERATED_KEYS);			
+			
+			pst.setString(1, motorista.getCidade());
+			pst.setLong(2, cnh);
+			pst.setString(3, motorista.getData());
+			pst.setString(4, motorista.getEstado());
+			pst.setBoolean(5, true);
+			pst.setString(6, motorista.getHora());
+			pst.setString(7, motorista.getName());
+			pst.setString(8, motorista.getPhone());
+			pst.setString(9, motorista.getPlaca());			
+			
+			int rowsAffected = pst.executeUpdate();
+			
+			if(rowsAffected> 0) {
+				ResultSet rs = pst.getGeneratedKeys();
+				while(rs.next()) {
+					ok = true;
+				}
+				
+			}
+			else System.out.println("No rown affected");
+		}
+		catch (SQLException e) {
+			ok=false;
+		System.out.println(e.getMessage());	
+		}
+		finally {
+			DB.closeResultSet(rs);
+			DB.closeStatement(pst);
+
+		}
+		return ok;
 	}
 
 	public Motorista getById(Long id) {
-		// TODO Auto-generated method stub
+
 		return null;
 	}
 
@@ -169,6 +212,34 @@ public class RepositoryDb {
 		// TODO Auto-generated method stub
 		
 	}
+	public Boolean update(Long id) {
+		boolean ok = false;
+		
+		try {
+			conn = DB.getConnection();
+			pst = conn.prepareStatement("UPDATE tb_motorista "
+											+ "SET fila = " + false 
+											+" WHERE "
+											+"(id = ?)");
+			
+			pst.setLong( 1, id );
+			
+			int rowsAccepted = pst.executeUpdate();
+			if(rowsAccepted>1)
+				ok=true;
+		
+		}catch (SQLException e) {
+			ok=false;
+		System.out.println(e.getMessage());	
+		}
+		finally {
+			DB.closeStatement(pst);
+			
+		}
+		return ok;
+
+		
+	}
 
 	public List<Motorista> findAll() {
 		// TODO Auto-generated method stub
@@ -229,3 +300,30 @@ public class RepositoryDb {
 	}
 	
 }
+
+
+
+
+
+
+
+
+
+
+/*
+ st = conn.prepareStatement("insert into department (Name) values ('D1'), ('D2')",  Statement.RETURN_GENERATED_KEYS);
++ "VALUES "
++ "( " + motorista.getCidade() + ", " 
+	+ motorista.getCnh() + ", "
+	+ motorista.getData() + ", "
+	+ motorista.getEstado() + ", "
+	+ true + ", "
+	+ motorista.getHora() + ", "
+	+ motorista.getName() + ", "
+	+ motorista.getPhone() + ", "
+	+ motorista.getPlaca() + ") ",*/
+
+
+
+
+

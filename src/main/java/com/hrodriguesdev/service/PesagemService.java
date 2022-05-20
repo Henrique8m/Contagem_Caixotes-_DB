@@ -2,17 +2,17 @@ package com.hrodriguesdev.service;
 
 import java.util.List;
 
-import com.hrodriguesdev.db.RepositoryDb;
+import com.hrodriguesdev.db.RepositoryPesagemDb;
 import com.hrodriguesdev.entities.Pesagem;
 
 //@Service
 public class PesagemService {
 	
 	
-	private RepositoryDb repository = new RepositoryDb();
+	private RepositoryPesagemDb repository = new RepositoryPesagemDb();
 	
-	public Pesagem getPesagemById(Long id) {
-		return (Pesagem) repository.findPesagemById(id);		
+	public Pesagem getById(Long id) {
+		return repository.getById(id);		
 	}
 
 	public List<Pesagem> getByMotoristaId(Long id) {
@@ -21,9 +21,7 @@ public class PesagemService {
 	}
 
 	public Boolean addPesagem(Pesagem pesagem) {
-		Pesagem save = repository.save(pesagem);
-		//return repository.findById(save.getId()).isPresent();
-		return true;
+		return repository.save(pesagem);
 	}
 
 	public List<Pesagem> getByDescarregando(boolean descarregando) {
@@ -31,9 +29,7 @@ public class PesagemService {
 	}
 
 
-	public void savePessagem(Pesagem pesagem) {
-		repository.save(pesagem);
-		repository.flush();
-		
+	public Boolean updatePesagem(Long idPesagem, Long idMotorista) {
+		return repository.update(idPesagem, idMotorista);
 	}
 }

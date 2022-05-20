@@ -47,7 +47,7 @@ public class Controller {
 	
 	//@GetMapping(value = "/pesagem/{id}")
 	public Pesagem getMPesgemById( Long id) {
-		return pesagemService.getPesagemById(id);		
+		return pesagemService.getById(id);		
 	}
 	
 	//@GetMapping(value = "/pesagem/motorista/{id}")
@@ -106,26 +106,11 @@ public class Controller {
 
 
 	public Boolean editMotoristaDaPesagem(Long idPesagem, Long idMotorista) {
-		Motorista motorista = getMotoristaById(idMotorista);
-		Pesagem pesagem = pesagemService.getPesagemById(idPesagem);
-		motorista.setPesagem(pesagem);
-		pesagem.setMotorista(motorista);
-		pesagem.setDescarregando(false);
-		saveMotorista(motorista);
-		savePessagem(pesagem);
-		return null;
+		motoristaService.updateMotorista(idMotorista);
+		return pesagemService.updatePesagem(idPesagem, idMotorista);
 		
 	}
 
-	public void saveMotorista(Motorista motorista) {
-		motoristaService.saveMotorista(motorista);
-		
-	}
-	
-	public void savePessagem(Pesagem pesagem) {
-		pesagemService.savePessagem(pesagem);
-		
-	}
 
 
 

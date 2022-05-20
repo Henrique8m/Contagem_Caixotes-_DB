@@ -123,20 +123,22 @@ public class MainViewController implements Initializable{
     @FXML
     private void salvarPesagem(ActionEvent e) throws IOException {
     	if(descarregando) {
-    		ObservableList<Pesagem> obs = tablePesoCarvao.getItems();    		    		
-    		for(Pesagem p: obs) {
-    			controller.editMotoristaDaPesagem(p.getId(), motorista.getId());
+    		ObservableList<Pesagem> obs = tablePesoCarvao.getItems(); 
+    		if(obs!=null) {    		
+    			for(Pesagem p: obs) {
+    				controller.editMotoristaDaPesagem(p.getId(), motorista.getId());
     			
-    		}    	
-    		totalPeso = 0d;
-    		caixotes.setText("0");
-    		pesoDescarregando.setText("0");
-	    	obsListTableCarvao.removeAll(obs);
-	    	tablePesoCarvao.refresh();
-	    	name.setText("");    		
-	    	placa2.setText("");
-	    	descarregando=false;
-	    	
+    			}    	
+	    		totalPeso = 0d;
+	    		caixotes.setText("0");
+	    		pesoDescarregando.setText("0");
+		    	obsListTableCarvao.removeAll(obs);
+		    	tablePesoCarvao.refresh();
+		    	name.setText("");    		
+		    	placa2.setText("");
+		    	descarregando=false;
+    			
+    		}	    	
     	}    	
     }    
  

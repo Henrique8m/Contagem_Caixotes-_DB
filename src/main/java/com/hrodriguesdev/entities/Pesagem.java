@@ -6,6 +6,16 @@ import java.io.Serializable;
 //@Table(name = "tb_pesagem")
 public class Pesagem implements Serializable{
 
+	public Motorista getMotorista() {
+		return motorista;
+	}
+
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+
 	public Long getId() {
 		return id;
 	}
@@ -85,6 +95,7 @@ public class Pesagem implements Serializable{
 	public void setDescarregando(Boolean descarregando) {
 		this.descarregando = descarregando;
 	}
+
 	
 	
 	
