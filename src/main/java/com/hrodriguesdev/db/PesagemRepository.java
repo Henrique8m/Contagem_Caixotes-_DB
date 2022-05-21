@@ -11,7 +11,7 @@ import java.util.List;
 import com.hrodriguesdev.entities.Motorista;
 import com.hrodriguesdev.entities.Pesagem;
 
-public class RepositoryPesagemDb {
+public class PesagemRepository {
 
 	Connection conn = null;
 	Statement st = null;
@@ -19,8 +19,35 @@ public class RepositoryPesagemDb {
 	PreparedStatement pst = null;
 	
 	public List<Motorista> getMotorista(){	
-		
 		return new ArrayList<>();
+	}
+	
+	public List<Pesagem> getPesagemByMotoristaId(Long id) {
+				List<Pesagem> list = new ArrayList<>();		
+		try {
+			conn = DB.getConnection();			
+			st = conn.createStatement();			
+			rs = st.executeQuery("SELECT * FROM carvaodb.tb_pesagem;");
+			
+			
+			while (rs.next()) 	
+				if( rs.getLong("motorista_id") == id)
+					list.add(augumaCoisa(rs));
+				
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
+		finally {
+			DB.closeResultSet(rs);
+			DB.closeStatement(st);
+
+			conn = null;
+			st = null;
+			rs = null;
+		}
+
+		return list;
 	}
 		
 	public Pesagem getById(Long id) {
@@ -61,6 +88,8 @@ public class RepositoryPesagemDb {
 		}
 		catch (SQLException e) {
 			e.printStackTrace();
+		}catch (Exception e1) {
+			e1.printStackTrace();
 		}
 		finally {
 			DB.closeResultSet(rs);
@@ -104,51 +133,48 @@ public class RepositoryPesagemDb {
 		return ok;
 	}
 
-	public List<Motorista> getByPlacaAndNameAndData(String placa, String name, String data) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	public Long save(Pesagem pesagem) {
+		Long id = null;
+		try {
+			conn = DB.getConnection();
+			pst = conn.prepareStatement("INSERT INTO tb_pesagem "
+					+ "(data, descarregando, hora, numero_caixote, peso, responsavel) "
+					+ "VALUES "
+					+ "(?, ?, ?, ?, ?, ?)",
+					Statement.RETURN_GENERATED_KEYS);	
+			
+			pst.setString(1, pesagem.getData());
+			pst.setBoolean(2, true);
+			pst.setString(3, pesagem.getHora());
+			pst.setInt(4, pesagem.getNumeroCaixote());
+			pst.setDouble(5, pesagem.getPeso());
+			pst.setString(6, pesagem.getResponsavel());				
+			
+			int rowsAffected = pst.executeUpdate();
+			
+			if(rowsAffected> 0) {
+				ResultSet rs = pst.getGeneratedKeys();
+				while(rs.next()) {
+					id = rs.getLong(1);	
+					System.out.println(rs.getLong(1));
+					
+				}
+				
+			}
+			else System.out.println("No rown affected");
+			
+		}
+		catch (SQLException e) {
+		System.out.println(e.getMessage());	
+		}
+		finally {
+			DB.closeResultSet(rs);
+			DB.closeStatement(pst);
 
-	public List<Motorista> getByPlacaAndName(String placa, String name) {
-		// TODO Auto-generated method stub
-		return null;
+		}
+		return id;
 	}
-
-	public List<Motorista> getByDataAndName(String data, String name) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public List<Motorista> getByPlacaAndData(String placa, String data) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public List<Motorista> getByName(String name) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public void flush() {
-		// TODO Auto-generated method stub
 		
-	}
-
-	public List<Motorista> findAll() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public List<Pesagem> findByMotoristaId(Long id) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public Pesagem findPesagemById(Long id) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
 	public Pesagem augumaCoisa(ResultSet rs) {
 		Pesagem pesagem = new Pesagem();
 		try {
@@ -175,38 +201,5 @@ public class RepositoryPesagemDb {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}	
-	}
-
-	public Boolean save(Pesagem pesagem) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
+	}	
 }
-
-
-
-
-
-
-
-
-
-
-/*
- st = conn.prepareStatement("insert into department (Name) values ('D1'), ('D2')",  Statement.RETURN_GENERATED_KEYS);
-+ "VALUES "
-+ "( " + motorista.getCidade() + ", " 
-	+ motorista.getCnh() + ", "
-	+ motorista.getData() + ", "
-	+ motorista.getEstado() + ", "
-	+ true + ", "
-	+ motorista.getHora() + ", "
-	+ motorista.getName() + ", "
-	+ motorista.getPhone() + ", "
-	+ motorista.getPlaca() + ") ",*/
-
-
-
-
-

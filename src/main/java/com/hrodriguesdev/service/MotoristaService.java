@@ -3,17 +3,14 @@ package com.hrodriguesdev.service;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.hrodriguesdev.db.RepositoryDb;
+import com.hrodriguesdev.db.MotoristaRepository;
 import com.hrodriguesdev.entities.Motorista;
-import com.hrodriguesdev.entities.Pesagem;
-
-import javafx.collections.ObservableList;
 
 //@Service
 public class MotoristaService {
 
 
-	private RepositoryDb repository = new RepositoryDb();
+	private MotoristaRepository repository = new MotoristaRepository();
 	
 	
 	public Motorista getMotoristaById(Long id) {
@@ -30,16 +27,6 @@ public class MotoristaService {
 		return repository.save(motorista);	
 	}
 	
-	public Boolean editMotorista(ObservableList<Pesagem> obs, Long id) {
-		Motorista edit = repository.getById(id);
-		System.out.println("1");
-		List<Pesagem> list = new ArrayList<>();
-		list.addAll(obs);
-		//edit.setPesagem(list);
-		System.out.println("2");
-		repository.save(edit);
-		return null;
-	}
 	
 	public List<Motorista> findAll(Motorista obj) {
 		List<Motorista> list = new ArrayList<>();	
@@ -80,11 +67,11 @@ public class MotoristaService {
 		}			
 		;*/
 		if(obj.getData()!= null) {
-			System.out.println("Entrou 7");
+			//System.out.println("Entrou 7");
 			list.addAll( repository.getByData(obj.getData()) );	
 		}
 		if(obj.getPlaca()!= null) {
-			System.out.println("Entrou 6");
+			//System.out.println("Entrou 6");
 			list.addAll( repository.getByPlaca(obj.getPlaca()) );
 		}
 		return list;
@@ -92,18 +79,17 @@ public class MotoristaService {
 
 	public void saveMotorista(Motorista motorista) {
 		repository.save(motorista);
-		repository.flush();
 		
-		
-	}
-
-	public List<Motorista> findAll() {
-		return repository.findAll();
 	}
 
 	public Boolean updateMotorista(Long idMotorista) {
 		return repository.update(idMotorista);
 		
+	}
+
+	public List<Motorista> findAllFirst() {
+		
+		return repository.findAllFirst();
 	}
 
 

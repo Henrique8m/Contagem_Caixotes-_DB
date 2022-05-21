@@ -19,12 +19,7 @@ public class Controller {
 	//@Autowired
 	private PesagemService pesagemService = new PesagemService();
 		
-	//@GetMapping(value = "/motorista/{id}")
-	public Motorista getMotoristaById(Long id) {
-		return motoristaService.getMotoristaById(id);		
-	}
 	
-	//@GetMapping(value = "/motorista/fila")
 	public ObservableList<Motorista> getByFila(Boolean fila){
 		ObservableList<Motorista> obs = FXCollections.observableArrayList();		
 		List<Motorista> list = motoristaService.getByFila(true);
@@ -33,6 +28,26 @@ public class Controller {
 			return obs;
 		}
 		return obs;
+	}
+	
+	public ObservableList<Motorista> findAll(Motorista obj) {
+		ObservableList<Motorista> obs = FXCollections.observableArrayList();
+		List<Motorista> list = motoristaService.findAll(obj);
+		if(list!=null) {
+			obs.addAll(list);
+			return obs;
+		}
+		return null;			
+	}
+
+	public ObservableList<Motorista> findPageable() {
+		ObservableList<Motorista> obs = FXCollections.observableArrayList();
+		List<Motorista> list = motoristaService.findAllFirst();
+		if(list!=null) {
+			obs.addAll(list);
+			return obs;
+		}
+		return null;	
 	}
 	
 	public ObservableList<Pesagem> getByDescarregando(boolean descarregando) {
@@ -45,75 +60,37 @@ public class Controller {
 		return null;
 	}
 	
-	//@GetMapping(value = "/pesagem/{id}")
-	public Pesagem getMPesgemById( Long id) {
-		return pesagemService.getById(id);		
-	}
-	
-	//@GetMapping(value = "/pesagem/motorista/{id}")
-	public ObservableList<Pesagem> getByMotoristaId( Long id){
-		
+	public ObservableList<Pesagem> getPesagemByMotoristaId(long id) {
 		ObservableList<Pesagem> obs = FXCollections.observableArrayList();
-		List<Pesagem> list = pesagemService.getByMotoristaId(id);
+		List<Pesagem> list = pesagemService.getPesagemByMotoristaId( id );
 		if(list!=null) {
 			obs.addAll(list);
 			return obs;
 		}
-		return null;	
+		return null;
 	}
 
+	public Motorista getMotoristaById(Long id) {
+		return motoristaService.getMotoristaById(id);		
+	}
+	
 	public Boolean addMotorista(Motorista motorista) {
 		return motoristaService.addMotorista(motorista);
 		
 	}
 	
-	public Boolean addPesagem(Pesagem pesagem) {
+	public Long addPesagem(Pesagem pesagem) {
 		return pesagemService.addPesagem(pesagem);
-		
+	
 	}
 	
-	public ObservableList<Motorista> findAll(Motorista obj) {
-		ObservableList<Motorista> obs = FXCollections.observableArrayList();
-		List<Motorista> list = motoristaService.findAll(obj);
-		if(list!=null) {
-			obs.addAll(list);
-			return obs;
-		}
-		return null;	
-		
+	public Boolean updateMotorista( Long idMotorista ) {
+		return motoristaService.updateMotorista(idMotorista);
 	}
-
-	public ObservableList<Pesagem> findByIdPessagem(Long id) {
-		ObservableList<Pesagem> obs = FXCollections.observableArrayList();
-		List<Pesagem> list = pesagemService.getByMotoristaId(id);
-		if(list!=null) {
-			obs.addAll(list);
-			return obs;
-		}
-		return null;	
-		
-	}
-
-	public ObservableList<Motorista> findPageable() {
-		ObservableList<Motorista> obs = FXCollections.observableArrayList();
-		List<Motorista> list = motoristaService.findAll();
-		if(list!=null) {
-			obs.addAll(list);
-			return obs;
-		}
-		return null;	
-	}
-
-
+	
 	public Boolean editMotoristaDaPesagem(Long idPesagem, Long idMotorista) {
-		motoristaService.updateMotorista(idMotorista);
 		return pesagemService.updatePesagem(idPesagem, idMotorista);
 		
 	}
-
-
-
-
-	
 
 }

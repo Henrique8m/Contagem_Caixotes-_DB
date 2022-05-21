@@ -1,14 +1,17 @@
 package com.hrodriguesdev;
 
+import com.hrodriguesdev.gui.alert.Alerts;
 import com.hrodriguesdev.gui.controller.AddMotoristaViewController;
 import com.hrodriguesdev.gui.controller.LoadViewController;
 import com.hrodriguesdev.gui.controller.MainViewController;
+import com.hrodriguesdev.securit.DataSecurit;
 import com.hrodriguesdev.serial.controller.SerialController;
 import com.hrodriguesdev.serial.properties.SerialProperties;
 import com.hrodriguesdev.utilitary.NewView;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
@@ -23,7 +26,7 @@ public class MainApp extends Application implements Runnable{
 	private Thread thread;
 	public static boolean springStart = false;
 
-	private final String nameIcon = "Yggdrasil icon.jpg";
+	private final String nameIcon = "Yggdrasilicon.jpg";
 	private final String nameImageViewStarting = "Yggdrasil.jpg";
 	
 	public static MainViewController viewController = new MainViewController();
@@ -34,7 +37,7 @@ public class MainApp extends Application implements Runnable{
 	//Carregando a view de Load
 	@Override
 	public void start(Stage arg0) throws Exception {
-
+		
 		loadImage(nameImageViewStarting);
 		Pane pane = (Pane) NewView.loadFXML("loadView", new LoadViewController());
 		pane.getChildren().add(starting);

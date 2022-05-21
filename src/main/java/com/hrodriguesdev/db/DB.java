@@ -37,9 +37,9 @@ public class DB {
 				}
 			}
 		}
-//"E:\\Javas\\Java\\db.properties"
+// "C:\\db.properties"
 	private static Properties loadPropertties() {
-		try (FileInputStream fs = new FileInputStream  ( "C:\\db.properties" )){
+		try (FileInputStream fs = new FileInputStream  ( "C:\\Program Files\\Java\\resources\\db.properties" )){
 			Properties props = new Properties();
 			props.load(fs);
 			return props;

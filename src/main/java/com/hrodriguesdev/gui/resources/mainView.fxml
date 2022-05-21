@@ -11,7 +11,6 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
@@ -68,7 +67,7 @@
                               </TableView>
                               <VBox prefHeight="502.0" prefWidth="313.0">
                                  <children>
-                                    <GridPane prefHeight="198.0" prefWidth="313.0" style="-fx-background-color: #a8a8a8; -fx-background-radius: 10;">
+                                    <GridPane prefHeight="239.0" prefWidth="312.0" style="-fx-background-color: #a8a8a8; -fx-background-radius: 10;">
                                       <columnConstraints>
                                         <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                       </columnConstraints>
@@ -83,20 +82,12 @@
                                                 <Font size="15.0" />
                                              </font>
                                              <graphic>
-                                                <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
-                                                   <image>
-                                                      <Image url="@icons-adicionar.png" />
-                                                   </image>
-                                                </ImageView>
+                                                <ImageView fx:id="adcionar" fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true" />
                                              </graphic>
                                           </Button>
                                           <Button mnemonicParsing="false" onAction="#salvarPesagem" prefHeight="43.0" prefWidth="254.0" style="-fx-cursor: hand; -fx-background-radius: 10;" text="Salvar Pessagem" GridPane.rowIndex="2">
                                              <graphic>
-                                                <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
-                                                   <image>
-                                                      <Image url="@icons-salvar-arquivo.png" />
-                                                   </image>
-                                                </ImageView>
+                                                <ImageView fx:id="save" fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true" />
                                              </graphic>
                                              <font>
                                                 <Font size="15.0" />
@@ -105,11 +96,7 @@
                                              <children>
                                                 <Button mnemonicParsing="false" onAction="#iniciarPesagem" prefHeight="45.0" prefWidth="109.0" style="-fx-cursor: hand; -fx-background-radius: 10;" text="Iniciar">
                                                    <graphic>
-                                                      <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
-                                                         <image>
-                                                            <Image url="@icons-fechar-painel.png" />
-                                                         </image>
-                                                      </ImageView>
+                                                      <ImageView fx:id="seta1" fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true" />
                                                    </graphic>
                                                    <font>
                                                       <Font size="15.0" />
@@ -117,11 +104,7 @@
                                                 </Button>
                                                 <Button mnemonicParsing="false" onAction="#desfazer" prefHeight="45.0" prefWidth="123.0" style="-fx-cursor: hand; -fx-background-radius: 10;" text="Desfazer">
                                                    <graphic>
-                                                      <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
-                                                         <image>
-                                                            <Image url="@icons-fechar-painel.png" />
-                                                         </image>
-                                                      </ImageView>
+                                                      <ImageView fx:id="seta" fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true" />
                                                    </graphic>
                                                    <font>
                                                       <Font size="15.0" />
@@ -140,7 +123,7 @@
                                           <Insets />
                                        </VBox.margin>
                                     </GridPane>
-                                    <AnchorPane prefHeight="488.0" prefWidth="297.0">
+                                    <AnchorPane prefHeight="353.0" prefWidth="315.0">
                                        <children>
                                           <Text layoutX="64.0" layoutY="47.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Resultado Preliminar">
                                              <font>
@@ -172,22 +155,14 @@
                                                 <Font name="Arial" size="20.0" />
                                              </font>
                                           </Text>
-                                          <ImageView fitHeight="114.0" fitWidth="113.0" layoutX="188.0" layoutY="374.0" pickOnBounds="true" preserveRatio="true">
-                                             <image>
-                                                <Image url="@Yggdrasil%20icon.jpg" />
-                                             </image>
-                                          </ImageView>
-                                          <ImageView fitHeight="114.0" fitWidth="113.0" layoutX="2.0" layoutY="374.0" pickOnBounds="true" preserveRatio="true">
-                                             <image>
-                                                <Image url="@metalNobre.jpg" />
-                                             </image>
-                                          </ImageView>
-                                          <Text layoutX="16.0" layoutY="292.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Comunicação Balança:">
+                                          <ImageView fx:id="logoYgg" fitHeight="114.0" fitWidth="113.0" layoutX="207.0" layoutY="227.0" pickOnBounds="true" preserveRatio="true" />
+                                          <ImageView fx:id="logo" fitHeight="114.0" fitWidth="113.0" layoutX="24.0" layoutY="228.0" pickOnBounds="true" preserveRatio="true" />
+                                          <Text layoutX="18.0" layoutY="212.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Comunicação Balança:">
                                              <font>
                                                 <Font name="Arial" size="20.0" />
                                              </font>
                                           </Text>
-                                          <Text fx:id="comunicacao" layoutX="246.0" layoutY="293.0" strokeType="OUTSIDE" strokeWidth="0.0">
+                                          <Text fx:id="comunicacao" layoutX="229.0" layoutY="211.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="72.0">
                                              <font>
                                                 <Font name="Arial" size="20.0" />
                                              </font>
@@ -247,11 +222,7 @@
                      </children></AnchorPane>
                </content>
                <graphic>
-                  <ImageView fitHeight="23.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@icons-bandeira-de-chegada.png" />
-                     </image>
-                  </ImageView>
+                  <ImageView fx:id="home" fitHeight="23.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true" />
                </graphic>
             </Tab>
           <Tab text="Busca">
@@ -273,11 +244,7 @@
                                     </Text>
                                     <Button mnemonicParsing="false" onAction="#buscar" prefHeight="43.0" prefWidth="254.0" style="-fx-cursor: hand; -fx-background-radius: 10;" text="Buscar">
                                        <graphic>
-                                          <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
-                                             <image>
-                                                <Image url="@icons-pesquisar.png" />
-                                             </image>
-                                          </ImageView>
+                                          <ImageView fx:id="buscar1" fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true" />
                                        </graphic>
                                        <font>
                                           <Font size="15.0" />
@@ -288,11 +255,7 @@
                                     </Button>
                                     <Button mnemonicParsing="false" onAction="#gerarPDF" prefHeight="43.0" prefWidth="254.0" style="-fx-cursor: hand; -fx-background-radius: 10;" text="Gerar Relatorio PDF">
                                        <graphic>
-                                          <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
-                                             <image>
-                                                <Image url="@icons-pdf.png" />
-                                             </image>
-                                          </ImageView>
+                                          <ImageView fx:id="pdf" fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true" />
                                        </graphic>
                                        <font>
                                           <Font size="15.0" />
@@ -403,11 +366,7 @@
                   </AnchorPane>
                </content>
                <graphic>
-                  <ImageView fitHeight="22.0" fitWidth="27.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@icons-pesquisar.png" />
-                     </image>
-                  </ImageView>
+                  <ImageView fx:id="buscar" fitHeight="22.0" fitWidth="27.0" pickOnBounds="true" preserveRatio="true" />
                </graphic></Tab>
         </tabs>
       </TabPane>

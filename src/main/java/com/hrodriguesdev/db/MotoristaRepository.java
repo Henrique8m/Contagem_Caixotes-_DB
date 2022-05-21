@@ -9,19 +9,44 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.hrodriguesdev.entities.Motorista;
-import com.hrodriguesdev.entities.Pesagem;
 
-public class RepositoryDb {
+public class MotoristaRepository {
 
 	Connection conn = null;
 	Statement st = null;
 	ResultSet rs = null;
 	PreparedStatement pst = null;
 	
-	public List<Motorista> getMotorista(){	
-		
-		return new ArrayList<>();
+
+	public List<Motorista> findAllFirst() {
+		List<Motorista> list = new ArrayList<>();		
+		try {
+			conn = DB.getConnection();			
+			st = conn.createStatement();			
+			rs = st.executeQuery("SELECT * FROM carvaodb.tb_motorista;");
+			
+			int i=0;
+			while (rs.next() && i<10) {
+				i++;
+				list.add(parseMotorista(rs));
+			}
+				
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
+		finally {
+			DB.closeResultSet(rs);
+			DB.closeStatement(st);
+
+			conn = null;
+			st = null;
+			rs = null;
+		}
+
+		return list;
 	}
+	
 		
 	public Motorista findById(Long id) {
 		conn = DB.getConnection();	
@@ -31,14 +56,13 @@ public class RepositoryDb {
 			
 			while (rs.next()) 
 				if( rs.getLong("id") == id) {
-					moto = augumaCoisa(rs);
+					moto = parseMotorista(rs);
 					DB.closeResultSet(rs);
 					DB.closeStatement(st);	
 					return moto;
 				}
 			
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}					
 
@@ -60,10 +84,12 @@ public class RepositoryDb {
 			
 			while (rs.next()) 
 				if( rs.getBoolean("fila") == true)
-					list.add(augumaCoisa(rs));
+					list.add(parseMotorista(rs));
 				
 		}
 		catch (SQLException e) {
+			e.printStackTrace();
+		}catch (Exception e) {
 			e.printStackTrace();
 		}
 		finally {
@@ -124,36 +150,6 @@ public class RepositoryDb {
 		return ok;
 	}
 
-	public Motorista getById(Long id) {
-
-		return null;
-	}
-
-	public List<Motorista> getByPlacaAndNameAndData(String placa, String name, String data) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public List<Motorista> getByPlacaAndName(String placa, String name) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public List<Motorista> getByDataAndName(String data, String name) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public List<Motorista> getByPlacaAndData(String placa, String data) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public List<Motorista> getByName(String name) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 	public List<Motorista> getByPlaca(String placa) {
 		List<Motorista> list = new ArrayList<>();		
 		try {
@@ -163,7 +159,7 @@ public class RepositoryDb {
 			
 			while (rs.next())  
 				if( rs.getString("placa").equalsIgnoreCase(placa))
-					list.add(augumaCoisa(rs));	
+					list.add(parseMotorista(rs));	
 			
 		}
 		catch (SQLException e) {
@@ -190,7 +186,7 @@ public class RepositoryDb {
 			
 			while (rs.next())  
 				if( rs.getString("data").equalsIgnoreCase(data))
-					list.add(augumaCoisa(rs));	
+					list.add(parseMotorista(rs));	
 			
 		}
 		catch (SQLException e) {
@@ -208,10 +204,6 @@ public class RepositoryDb {
 		return list;
 	}
 
-	public void flush() {
-		// TODO Auto-generated method stub
-		
-	}
 	public Boolean update(Long id) {
 		boolean ok = false;
 		
@@ -225,7 +217,7 @@ public class RepositoryDb {
 			pst.setLong( 1, id );
 			
 			int rowsAccepted = pst.executeUpdate();
-			if(rowsAccepted>1)
+			if(rowsAccepted>0)
 				ok=true;
 		
 		}catch (SQLException e) {
@@ -240,36 +232,9 @@ public class RepositoryDb {
 
 		
 	}
-
-	public List<Motorista> findAll() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public List<Pesagem> findByMotoristaId(Long id) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public Pesagem save(Pesagem pesagem) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public List<Pesagem> getByDescarregando(boolean descarregando) {
-		// TODO Auto-generated method stub
-		return new ArrayList<>();
-	}
-
-
-
-
-	public Pesagem findPesagemById(Long id) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 	
-	public Motorista augumaCoisa(ResultSet rs) {
+	
+	public Motorista parseMotorista(ResultSet rs) {
 		Motorista moto = new Motorista();
 		try {
 			moto.setId( rs.getLong("Id") );	
@@ -297,33 +262,5 @@ public class RepositoryDb {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}	
-	}
-	
+	}	
 }
-
-
-
-
-
-
-
-
-
-
-/*
- st = conn.prepareStatement("insert into department (Name) values ('D1'), ('D2')",  Statement.RETURN_GENERATED_KEYS);
-+ "VALUES "
-+ "( " + motorista.getCidade() + ", " 
-	+ motorista.getCnh() + ", "
-	+ motorista.getData() + ", "
-	+ motorista.getEstado() + ", "
-	+ true + ", "
-	+ motorista.getHora() + ", "
-	+ motorista.getName() + ", "
-	+ motorista.getPhone() + ", "
-	+ motorista.getPlaca() + ") ",*/
-
-
-
-
-

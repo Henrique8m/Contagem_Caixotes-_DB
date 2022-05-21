@@ -67,9 +67,11 @@ public class GeneratorPDF {
 	         
 	    }catch(DocumentException de) {
 	    	System.err.println(de.getMessage());
+	    	return false;
 	     }
 	     catch(IOException ioe) {
 	         System.err.println(ioe.getMessage());
+	         return false;
 	     }
 	     document.close();
 	     return true;

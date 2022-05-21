@@ -12,7 +12,9 @@ import com.hrodriguesdev.controller.Controller;
 import com.hrodriguesdev.controller.PesagemController;
 import com.hrodriguesdev.entities.Motorista;
 import com.hrodriguesdev.entities.Pesagem;
+import com.hrodriguesdev.gui.alert.Alerts;
 import com.hrodriguesdev.relatorio.GeneratorPDF;
+import com.hrodriguesdev.securit.DataSecurit;
 import com.hrodriguesdev.serial.controller.SerialController;
 import com.hrodriguesdev.serial.properties.SerialProperties;
 import com.hrodriguesdev.utilitary.Format;
@@ -23,10 +25,13 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
@@ -46,8 +51,10 @@ public class MainViewController implements Initializable{
 	
 	private List<Pesagem> listPDF = new ArrayList<>();
 	private Motorista motoristaPDF;
-		
+	@FXML
+	private ImageView logoYgg, logo, save, seta, seta1, adcionar, home, buscar, buscar1, pdf;
 	//Tabela fila de motoristas
+
 	@FXML
 	private TableColumn<Motorista, String> nomeMotorista;
 	@FXML
@@ -88,6 +95,8 @@ public class MainViewController implements Initializable{
     
     @FXML
     private void iniciarPesagem(ActionEvent e) throws IOException {
+		
+
     	if(!descarregando) {    		
 	    	if(!tableMotorista.getSelectionModel().isEmpty()) {
 	    		descarregando=true;
@@ -123,11 +132,19 @@ public class MainViewController implements Initializable{
     @FXML
     private void salvarPesagem(ActionEvent e) throws IOException {
     	if(descarregando) {
-    		ObservableList<Pesagem> obs = tablePesoCarvao.getItems(); 
-    		if(obs!=null) {    		
+    		ObservableList<Pesagem> obs = tablePesoCarvao.getItems();
+    		if( !controller.updateMotorista(motorista.getId())) {
+    			Alerts.showAlert("Error", "Erro ao atualizar o banco de dados!! ",
+    					"Não conseguil tirar o motorista da fila de pesagem.", AlertType.ERROR);
+    		}
+    		
+    		if(obs.size()>0) {    		
     			for(Pesagem p: obs) {
-    				controller.editMotoristaDaPesagem(p.getId(), motorista.getId());
-    			
+    				if(!controller.editMotoristaDaPesagem(p.getId(), motorista.getId())) {
+    	    			Alerts.showAlert("Error", "Erro ao atualizar o banco de dados!! ",
+    	    					"Não conseguil tirar a pesagem da fila.", AlertType.ERROR);
+    					return;
+    				}
     			}    	
 	    		totalPeso = 0d;
 	    		caixotes.setText("0");
@@ -138,8 +155,14 @@ public class MainViewController implements Initializable{
 		    	placa2.setText("");
 		    	descarregando=false;
     			
-    		}	    	
-    	}    	
+    		}else {
+    			Alerts.showAlert("Operação", "A lista de pesagem esta nula!! ",
+    					"Somente finaliza se tiver peso", AlertType.ERROR);
+    		}
+    	}else {
+			Alerts.showAlert("Operação", "Não tem caminhao descarregando ",
+					"", AlertType.ERROR);
+    	}
     }    
  
 	
@@ -191,7 +214,7 @@ public class MainViewController implements Initializable{
     	}    	    	
     	
     	ObservableList<Motorista> ojs = controller.findAll(obj);
-    	if(ojs != null ) {
+    	if(ojs.size()>0 ) {
     		obsListTableViewMotoristaFind = ojs;    	
 ;
     	}else { 		
@@ -227,7 +250,7 @@ public class MainViewController implements Initializable{
 		if(!tableMotoristaFind.getSelectionModel().isEmpty()) {
 			motoristaid = tableMotoristaFind.getSelectionModel().getSelectedItem().getId();
 			motoristaPDF = controller.getMotoristaById(motoristaid);
-			obs = controller.getByMotoristaId(motoristaid);
+			obs = controller.getPesagemByMotoristaId(motoristaid);
 			if(obs != null) {
 				listPDF = new ArrayList<>();
 				obsListTableCarvao1 = obs;
@@ -242,7 +265,14 @@ public class MainViewController implements Initializable{
 	@FXML
     private void gerarPDF(ActionEvent e) throws IOException {
 		if(motoristaPDF != null) {
-			generator.newDocument(motoristaPDF, listPDF);
+			if(!generator.newDocument(motoristaPDF, listPDF) ) {
+				Alerts.showAlert("Documento ", "Não foi possiver criar o documento ",
+						"", AlertType.ERROR);
+			}else {
+				String caminho = "E:\\Javas\\Java";
+				Alerts.showAlert("Documento ", "Relatorio criado com sucesso!! ",
+						"Diretorio = " + caminho , AlertType.INFORMATION);
+			}
 		}    	
     	
     }
@@ -261,9 +291,31 @@ public class MainViewController implements Initializable{
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		
 		serialController = MainApp.serialController;
 		strartTable();
 		pesagemController.start();
+		
+		Image image = new Image(MainApp.class.getResource("gui/resources/Yggdrasilicon.jpg").toString() );
+		logoYgg.setImage(image);
+		image = new Image(MainApp.class.getResource("gui/resources/metalNobre.jpg").toString() );
+		logo.setImage(image);
+		image = new Image(MainApp.class.getResource("gui/resources/icons-salvar-arquivo.png").toString() );
+		save.setImage(image);
+		image = new Image(MainApp.class.getResource("gui/resources/icons-fechar-painel.png").toString() );
+		seta.setImage(image);
+		seta1.setImage(image);
+		image = new Image(MainApp.class.getResource("gui/resources/icons-adicionar.png").toString() );
+		adcionar.setImage(image);
+		image = new Image(MainApp.class.getResource("gui/resources/icons-bandeira-de-chegada.png").toString() );
+		home.setImage(image);
+		image = new Image(MainApp.class.getResource("gui/resources/icons-pesquisar.png").toString() );
+		buscar.setImage(image);
+		buscar1.setImage(image);
+		image = new Image(MainApp.class.getResource("gui/resources/icons-pdf.png").toString() );
+		pdf.setImage(image);
+		 
+		 
 		
 		//Start serial
 		/*
@@ -289,7 +341,13 @@ public class MainViewController implements Initializable{
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
+    	
+		if(!DataSecurit.validateData()) {
+			Alerts.showAlert("Securit", "Error, validação da licença ",
+					"Erro ao validar a licença, entre em contato com o adim", AlertType.ERROR);
+		}
 	}	 	
+	
 	
 	public void strartTable() {	
 		//Table fila de Motorista descarregando
@@ -339,14 +397,25 @@ public class MainViewController implements Initializable{
 		
 	}
 
-	public void addPesagem(Double valueStabilized) {
+	public void addPesagem(Double valueStabilized) { 
 		date = new Date(System.currentTimeMillis());
 		totalPeso += valueStabilized;
 		pesoDescarregando.setText( Double.toString(totalPeso) );
 		Pesagem pesagem = new Pesagem(obsListTableCarvao.size() + 1 ,valueStabilized, Format.formatData.format(date), Format.formataTimeString.format(date), "", true );
-		obsListTableCarvao.add(pesagem);
+
 		caixotes.setText( Integer.toString(obsListTableCarvao.size()) );
-		controller.addPesagem(pesagem);
-		
+		Long id = controller.addPesagem(pesagem);
+		if( id == null ) {
+			Alerts.showAlert("Pesagem ", "Erro na criação de um novo peso ",
+					"", AlertType.ERROR);
+			return;
+		}else pesagem.setId(id);		
+		obsListTableCarvao.add(pesagem);
 	}
+	/*
+	@FXML
+    private void insert(ActionEvent e) throws IOException {
+		addPesagem(35.0);
+    }
+*/
 }

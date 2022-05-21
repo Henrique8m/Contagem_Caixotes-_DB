@@ -35,7 +35,7 @@ public static void getNewViewModal(String title, Pane pane, Stage stageEvent){
 public static Stage getNewView(String title, Scene mainScene, Stage stage){
 	stage.setMaximized(true);
 	stage.setTitle(title);
-    stage.getIcons().add(new Image(MainApp.class.getResource("gui/resources/" + "Yggdrasil icon.jpg").toString()));
+    stage.getIcons().add(new Image(MainApp.class.getResource("gui/resources/" + "Yggdrasilicon.jpg").toString()));
 	stage.setScene(mainScene);
 	stage.show();
 	return stage;

@@ -4,6 +4,7 @@ import java.net.URL;
 import java.sql.Date;
 import java.util.ResourceBundle;
 
+import com.hrodriguesdev.MainApp;
 import com.hrodriguesdev.controller.Controller;
 import com.hrodriguesdev.entities.Motorista;
 import com.hrodriguesdev.utilitary.Format;
@@ -13,6 +14,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -24,6 +27,8 @@ public class AddMotoristaViewController implements Initializable {
 	//@Autowired
 	private Controller controller = new Controller();
 	
+	@FXML
+	private ImageView cancelarImg, salvarImg;
 	@FXML
 	private Text erro;
 	@FXML
@@ -145,6 +150,11 @@ public class AddMotoristaViewController implements Initializable {
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		Image image =  new Image(MainApp.class.getResource("gui/resources/icons-adicionar.png").toString() );
+		salvarImg.setImage(image);
+		image = new Image(MainApp.class.getResource("gui/resources/icons-excluir.png").toString() );
+		cancelarImg.setImage(image);
+		
 		date = new Date(System.currentTimeMillis());
 	    hora.setText(Format.formataTimeString.format(date));
 	    data.setText(Format.formatData.format(date));
