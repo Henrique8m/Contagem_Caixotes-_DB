@@ -40,12 +40,11 @@ public class PesagemController extends Thread {
 		}
 	}
 	
-	@SuppressWarnings("unused")
 	private void toCompare( Double newValue ) {
 		try {
-			Double bordaDeSubida = 1.0d;
-			Double balancaVazia = 5.0d;
-			if(newValue > 10.0d) {
+			Double bordaDeSubida = MainApp.bordaDeSubida;
+			Double balancaVazia = MainApp.balancaVazia;
+			if(newValue > balancaVazia) {
 				estabilized = valuestabilized(newValue);
 				if(newValue > (oldValue + bordaDeSubida) && !estabilized) {	
 					oldValue = newValue;
@@ -61,11 +60,11 @@ public class PesagemController extends Thread {
 				if(filtroDownSave >= 2 ) {
 					if(estabilized) {
 						MainApp.viewController.addPesagem(valueStabilized);	
-						System.out.println("Balança esvaziou e salvou o peso estabilizado de " + valueStabilized + " Kilos");
+						System.out.println("Balanca esvaziou e salvou o peso estabilizado de " + valueStabilized + " Kilos");
 						
 					}else {
 						MainApp.viewController.addPesagem(rascunho);						
-						System.out.println("Balança esvaziou e salvou o rascunho de " + rascunho + " Kilos");
+						System.out.println("Balanca esvaziou e salvou o rascunho de " + rascunho + " Kilos");
 						
 					}
 					filtroDownSave = 0;
@@ -91,7 +90,7 @@ public class PesagemController extends Thread {
 		//
 		if( valueStabilized >( newValue - 3.0 ) && valueStabilized <( newValue + 3.0 ) ) {
 			valueStabilized = newValue;
-			if(filtro >= 6) {
+			if(filtro >= MainApp.filtroBalancaEstabilizada) {
 				filtroDown = 0;
 				return true;
 				
@@ -106,7 +105,7 @@ public class PesagemController extends Thread {
 			filtroDown++;
 			
 			//Se contar mais de tres vezes, pode se dizer que realmente o processo caiu de valor.
-			if(filtroDown >= 2 ) {
+			if(filtroDown >= MainApp.filtroBalancaEsPesoDescendo ) {
 				filtro = 0;
 				valueStabilized = newValue;
 				return false;

@@ -5,16 +5,18 @@ import java.io.OutputStream;
 
 import javax.comm.SerialPort;
 
+import com.hrodriguesdev.MainApp;
+
 public class WriteGenericData {	
 	private OutputStream saida;
-	private Integer threadSleep = 500;
+
 	
 	public void writeData(byte[] bufferWrite, SerialPort serialPort, int BufferSize) {
 
 		//Padrao do bufer = 8
 		//Indicadores alfa = 27
 		try {
-			Thread.sleep(threadSleep);
+			Thread.sleep(MainApp.timeOutSerial);
 			serialPort.setOutputBufferSize(BufferSize);
 			saida = serialPort.getOutputStream();
 			saida.write(bufferWrite);

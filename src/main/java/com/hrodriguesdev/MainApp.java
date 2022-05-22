@@ -1,17 +1,14 @@
 package com.hrodriguesdev;
 
-import com.hrodriguesdev.gui.alert.Alerts;
 import com.hrodriguesdev.gui.controller.AddMotoristaViewController;
 import com.hrodriguesdev.gui.controller.LoadViewController;
 import com.hrodriguesdev.gui.controller.MainViewController;
-import com.hrodriguesdev.securit.DataSecurit;
 import com.hrodriguesdev.serial.controller.SerialController;
 import com.hrodriguesdev.serial.properties.SerialProperties;
 import com.hrodriguesdev.utilitary.NewView;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
@@ -33,6 +30,19 @@ public class MainApp extends Application implements Runnable{
 	public static AddMotoristaViewController viewaddMotorista = new AddMotoristaViewController();
 	public static SerialProperties serialProperties = new SerialProperties();
 	public static SerialController serialController = new SerialController();
+	
+	public static String caminhoPDF = "C:\\Users\\Usuario\\Desktop\\Carvao.pdf";
+	public static String caminhoDbProperties = "C:\\Program Files\\Java\\resources\\db.properties";
+	
+	public static double bordaDeSubida = 5.0d;
+	public static double pesomaior = 0d;
+	public static double balancaVazia = 30.0d;
+	public static int filtroBalancaEstabilizada = 3;
+	public static int filtroBalancaEsPesoDescendo = 2;
+	
+	public static int timeOutSerial = 500;
+	
+	
 
 	//Carregando a view de Load
 	@Override

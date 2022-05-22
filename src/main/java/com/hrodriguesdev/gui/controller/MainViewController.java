@@ -16,7 +16,6 @@ import com.hrodriguesdev.gui.alert.Alerts;
 import com.hrodriguesdev.relatorio.GeneratorPDF;
 import com.hrodriguesdev.securit.DataSecurit;
 import com.hrodriguesdev.serial.controller.SerialController;
-import com.hrodriguesdev.serial.properties.SerialProperties;
 import com.hrodriguesdev.utilitary.Format;
 import com.hrodriguesdev.utilitary.NewView;
 
@@ -284,8 +283,6 @@ public class MainViewController implements Initializable{
 //	private String defautPort = "COM4";
 	private Date date;
 	
-	//@Autowired
-	private SerialProperties serialProperties = new SerialProperties();
 	private SerialController serialController = new SerialController();
 	private PesagemController pesagemController = new PesagemController();
 	
@@ -333,7 +330,7 @@ public class MainViewController implements Initializable{
 			else if(e.equals(lastPort))
 			serialProperties.setPorta(lastPort);
 		*/
-		serialProperties.setPorta("COM4");
+		//serialProperties.setPorta("COM4");
 		
     	try {
     		serialController.read();
@@ -403,7 +400,7 @@ public class MainViewController implements Initializable{
 		pesoDescarregando.setText( Double.toString(totalPeso) );
 		Pesagem pesagem = new Pesagem(obsListTableCarvao.size() + 1 ,valueStabilized, Format.formatData.format(date), Format.formataTimeString.format(date), "", true );
 
-		caixotes.setText( Integer.toString(obsListTableCarvao.size()) );
+		caixotes.setText( Integer.toString(obsListTableCarvao.size() + 1 ) );
 		Long id = controller.addPesagem(pesagem);
 		if( id == null ) {
 			Alerts.showAlert("Pesagem ", "Erro na criação de um novo peso ",

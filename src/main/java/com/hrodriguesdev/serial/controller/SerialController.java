@@ -23,7 +23,7 @@ public class SerialController implements Runnable{
     
     private int bufferSizeRead;
     private int bufferSizeWrite;
-    private int endereço = 1;
+    private int endereco = 1;
 	private int negativo;
 	private int stavel;
 	private int saturada;
@@ -35,7 +35,7 @@ public class SerialController implements Runnable{
  
     public SerialController() {	}
     
-	@SuppressWarnings("removal")
+	@SuppressWarnings({"deprecation" })
 	public void read() throws InterruptedException {		
 		if(!thread.isAlive()){
 			thread.start();
@@ -64,7 +64,7 @@ public class SerialController implements Runnable{
     private void sweep(SerialPort serial) {
     	try{
         	if(serial != null) {            
-                bufferWrite = CalculatorData.addressReadAlfa(endereço,Gadgets.ALFA.getRegistrador(),Gadgets.ALFA.getTotalRegistradores()); 
+                bufferWrite = CalculatorData.addressReadAlfa(endereco,Gadgets.ALFA.getRegistrador(),Gadgets.ALFA.getTotalRegistradores()); 
 				bufferSizeRead = Gadgets.ALFA.getBufferRead();
 				bufferSizeWrite = Gadgets.ALFA.getBufferWrite();
 				serialService.writeData(bufferWrite, serial, bufferSizeWrite);
@@ -78,13 +78,13 @@ public class SerialController implements Runnable{
         			stavel = Integer.parseInt( String.valueOf(binario.charAt(2) ) );
         			saturada = Integer.parseInt( String.valueOf(binario.charAt(1) ) );
         			
-        			if(stavel==1 && saturada==1 && negativo==1) {
-        				display = formatData.formatDataAlfa(bufferReadAlfa); 
-        				//System.out.println("Balança estavel, entrando no notify ");
+        			if(stavel==1 && saturada==1) {
+        				if(negativo==1)
+        					display = formatData.formatDataAlfa(bufferReadAlfa); 
+        				else if(formatData.formatDataAlfa(bufferReadAlfa)<= MainApp.balancaVazia)
+        					display = formatData.formatDataAlfa(bufferReadAlfa);
     			    	synchronized (this) {
     			    		notify();
-    	            		//System.out.println("Enviando o notify");
-    	            		//System.out.println("Passou do notify");
     			    		
     					}
         				

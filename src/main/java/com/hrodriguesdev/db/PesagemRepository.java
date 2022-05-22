@@ -156,7 +156,7 @@ public class PesagemRepository {
 				ResultSet rs = pst.getGeneratedKeys();
 				while(rs.next()) {
 					id = rs.getLong(1);	
-					System.out.println(rs.getLong(1));
+					//System.out.println(rs.getLong(1));
 					
 				}
 				

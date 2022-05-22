@@ -5,6 +5,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
 
+import com.hrodriguesdev.MainApp;
 import com.hrodriguesdev.entities.Motorista;
 import com.hrodriguesdev.entities.Pesagem;
 import com.itextpdf.text.Document;
@@ -15,7 +16,7 @@ import com.itextpdf.text.pdf.PdfWriter;
 
 public class GeneratorPDF {
 	
-	private String caminho = "C:\\Users\\Henrique\\Desktop\\PDF Teste Carvao.pdf";
+	private String caminho = MainApp.caminhoPDF;
 	//C:\\Users\\henri\\Desktop\\PDF teste.pdf
 	private Document document;
 	private Paragraph paragraph;

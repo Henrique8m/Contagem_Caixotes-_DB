@@ -9,6 +9,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Properties;
 
+import com.hrodriguesdev.MainApp;
+
 public class DB {
 
 	private static Connection conn = null;
@@ -39,7 +41,7 @@ public class DB {
 		}
 // "C:\\db.properties"
 	private static Properties loadPropertties() {
-		try (FileInputStream fs = new FileInputStream  ( "C:\\Program Files\\Java\\resources\\db.properties" )){
+		try (FileInputStream fs = new FileInputStream  ( MainApp.caminhoDbProperties )){
 			Properties props = new Properties();
 			props.load(fs);
 			return props;
