@@ -78,7 +78,8 @@ public class SerialController implements Runnable{
         			stavel = Integer.parseInt( String.valueOf(binario.charAt(2) ) );
         			saturada = Integer.parseInt( String.valueOf(binario.charAt(1) ) );
         			
-        			if(stavel==1 && saturada==1) {
+        			//if(stavel==1 && saturada==1) {
+            		if(saturada==1) {
         				if(negativo==1)
         					display = formatData.formatDataAlfa(bufferReadAlfa); 
         				else if(formatData.formatDataAlfa(bufferReadAlfa)<= MainApp.balancaVazia)
