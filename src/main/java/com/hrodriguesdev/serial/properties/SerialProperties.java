@@ -9,16 +9,16 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.hrodriguesdev.MainApp;
+
 public class SerialProperties {
-    private String porta = "COM4";
-    private int baud = 19200;
-    private int timeout = 500;
-    private int stopBits = 1;
+    private String porta;
+    private int baud = 0;
+    private int timeout = 0;
+    private int stopBits = 0;
     private String paridade = "None";
     private String pathToProperties = null;
-    private String properties = "SerialProperties.properties";
-    private String diretorioStr1 = "\\AppData\\Local\\YggDrasil";
-    private String diretorioStr2 = "\\AppData\\Local\\YggDrasil\\serial";
+
     
     private File arquivoProperties;
     
@@ -28,28 +28,28 @@ public class SerialProperties {
     }
 
     public SerialProperties(){
-    	File file;
-    	try {
-    		pathToProperties = getClass().getResource(properties).getPath();
-    		
-    	}catch(NullPointerException e) {	
-    		createdDiretorioAndFile();
-    			writeFile();
-    		
+    	createdDiretorioAndFile();    	
+    	pathToProperties = System.getProperty("user.home").toString() + MainApp.diretorioStr2 +"\\" + MainApp.properties;
   
-    	}
     	if(pathToProperties!=null)
     		try(BufferedReader br = new BufferedReader(new FileReader(pathToProperties) ) ){
     			String itemsProperties = br.readLine();
     			String[] line = new String[5];
 				int i = 0;
     			while(itemsProperties != null) {				
-					line[i] = itemsProperties;
-					System.out.println(line[1]);								
+					line[i] = itemsProperties;								
 					itemsProperties = br.readLine();
 					i++;
 					
 				}	
+				if(!line[0].isEmpty())
+					baud =Integer.parseInt(line[0]);
+				if(!line[1].isEmpty())
+					stopBits =Integer.parseInt(line[1]);
+				if(!line[2].isEmpty())
+					porta =line[2] ;
+				
+				System.out.println(baud + "\n" + stopBits + "\n" + porta);
 				
 	    	}catch (IOException e) {
 				System.out.println(e.getMessage());
@@ -89,12 +89,16 @@ public class SerialProperties {
 	private void createdDiretorioAndFile() {
 		
 		try {
-			File diretorio1 = new File(System.getProperty("user.home").toString() + diretorioStr1);
+			File diretorio1 = new File(System.getProperty("user.home").toString() + MainApp.diretorioStr1);
 			diretorio1.mkdir();
-			File diretorio2 = new File(System.getProperty("user.home").toString() + diretorioStr2);
+			File diretorio2 = new File(System.getProperty("user.home").toString() + MainApp.diretorioStr2);
 			diretorio2.mkdir();
-			arquivoProperties = new File(diretorio2, properties );
-			arquivoProperties.createNewFile(); 
+			arquivoProperties = new File(diretorio2, MainApp.properties );
+			if(!arquivoProperties.exists()) {
+				arquivoProperties.createNewFile(); 
+				writeFile();
+			}
+				
 			
 		}catch (IOException e1) {
 			e1.printStackTrace(); 
