@@ -22,7 +22,7 @@ public class MotoristaService {
 		return repository.getByFila(fila);
 	}
 
-	public Boolean addMotorista(Motorista motorista) {
+	public Long addMotorista(Motorista motorista) {
 			
 		return repository.save(motorista);	
 	}

@@ -42,7 +42,7 @@ public class MainApp extends Application implements Runnable{
 	public static int filtroBalancaEsPesoDescendo = 2;
 	
 	public static int timeOutSerial = 500;
-	public static Integer dataSpired = 20220601;
+	public static Integer dataSpired = 20230601;
 	
 	public static MainViewController viewController = new MainViewController();
 	public static AddMotoristaViewController viewaddMotorista = new AddMotoristaViewController();

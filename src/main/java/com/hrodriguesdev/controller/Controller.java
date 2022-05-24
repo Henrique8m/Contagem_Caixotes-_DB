@@ -74,7 +74,7 @@ public class Controller {
 		return motoristaService.getMotoristaById(id);		
 	}
 	
-	public Boolean addMotorista(Motorista motorista) {
+	public Long addMotorista(Motorista motorista) {
 		return motoristaService.addMotorista(motorista);
 		
 	}

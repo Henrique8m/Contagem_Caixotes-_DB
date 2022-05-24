@@ -104,9 +104,9 @@ public class MotoristaRepository {
 		return list;
 	}
 
-	public Boolean save(Motorista motorista) {
-		boolean ok = false;
+	public Long save(Motorista motorista) {
 		Long cnh = 0l;
+		Long id = 0l;
 		if(motorista.getCnh()!=null) cnh = motorista.getCnh();
 		
 		try {
@@ -132,14 +132,14 @@ public class MotoristaRepository {
 			if(rowsAffected> 0) {
 				ResultSet rs = pst.getGeneratedKeys();
 				while(rs.next()) {
-					ok = true;
+					id = rs.getLong(1);
+					
 				}
 				
 			}
 			else System.out.println("No rown affected");
 		}
 		catch (SQLException e) {
-			ok=false;
 		System.out.println(e.getMessage());	
 		}
 		finally {
@@ -147,7 +147,7 @@ public class MotoristaRepository {
 			DB.closeStatement(pst);
 
 		}
-		return ok;
+		return id;
 	}
 
 	public List<Motorista> getByPlaca(String placa) {

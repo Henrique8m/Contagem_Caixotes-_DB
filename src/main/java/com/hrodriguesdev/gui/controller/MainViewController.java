@@ -101,6 +101,7 @@ public class MainViewController implements Initializable{
 	    		descarregando=true;
 	    		name.setText(tableMotorista.getSelectionModel().getSelectedItem().getName()); 
 	    		placa2.setText(tableMotorista.getSelectionModel().getSelectedItem().getPlaca()); 
+	    		motorista = new Motorista();
 	    		motorista = tableMotorista.getSelectionModel().getSelectedItem();	    		
 	    		obsListTableMotorista.remove(tableMotorista.getSelectionModel().getSelectedIndex());	    		
 	    		tableMotorista.refresh();

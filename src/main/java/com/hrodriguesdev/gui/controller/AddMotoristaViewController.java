@@ -59,7 +59,8 @@ public class AddMotoristaViewController implements Initializable {
 			erro.setText("ERRO");
 		}
 		try {
-			if(controller.addMotorista(motorista)) {
+			motorista.setId(controller.addMotorista(motorista));
+			if(motorista.getId() != 0l) {
 				Stage stage = (Stage) salvar.getScene().getWindow(); 
 				stage.close();
 				

@@ -234,7 +234,7 @@
                            <children>
                               <VBox maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="697.0" prefWidth="339.0">
                                  <children>
-                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Esta pagina é destinada a&#10;busca de pesagens já concluidas.&#10;Preencha com informações para &#10;que sua busca seja criteriada,&#10;em seguida, click em buscar.&#10;Será gerada uma lista com todas&#10;ja gravadas, com o mouse, &#10;selecione a que deseja visualizar,&#10;se for a correta, botão de gerar &#10;PDF!&#10;" textAlignment="CENTER">
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Esta pagina é destinada a&#10;busca de pesagens já concluidas.&#10;Preencha com informações para &#10;que sua busca seja criteriada,&#10;em seguida, click em buscar.&#10;Será gerada uma lista com todas&#10;ja gravadas, com o mouse, &#10;selecione a que deseja visualizar,&#10;se for a correta, botão de gerar &#10;PDF! Duvidas-(37)99924-9796&#10;" textAlignment="CENTER">
                                        <font>
                                           <Font name="Comic Sans MS" size="18.0" />
                                        </font>
