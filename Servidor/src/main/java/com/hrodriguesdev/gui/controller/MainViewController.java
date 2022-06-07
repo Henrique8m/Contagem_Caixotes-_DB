@@ -94,8 +94,10 @@ public class MainViewController implements Initializable{
     
     @FXML
     private void iniciarPesagem(ActionEvent e) throws IOException {
-		
-
+		String bug = "bug";
+    	if(bug == "") {
+    		System.out.println( "Henrique");
+    	}
     	if(!descarregando) {    		
 	    	if(!tableMotorista.getSelectionModel().isEmpty()) {
 	    		descarregando=true;
