@@ -4,6 +4,7 @@ import javax.comm.SerialPort;
 
 import com.hrodriguesdev.MainApp;
 import com.hrodriguesdev.gui.controller.MainViewController;
+import com.hrodriguesdev.serial.properties.Parametros;
 import com.hrodriguesdev.serial.service.FormatData;
 import com.hrodriguesdev.serial.service.SerialService;
 import com.hrodriguesdev.serial.utilitary.CalculatorByteInt;
@@ -16,6 +17,7 @@ public class SerialController implements Runnable{
 	private MainViewController view = MainApp.viewController;
     private SerialService serialService = new SerialService();
     private FormatData formatData = new FormatData();
+    private Parametros params = new Parametros();
     
     private byte[] bufferWrite= new byte[8];
     private byte[] bufferRead = new byte[7];
@@ -36,7 +38,8 @@ public class SerialController implements Runnable{
     public SerialController() {	}
     
 	@SuppressWarnings({"deprecation" })
-	public void read() throws InterruptedException {		
+	public void read() throws InterruptedException {	
+		params.writeParams();
 		if(!thread.isAlive()){
 			thread.start();
 			
@@ -77,19 +80,34 @@ public class SerialController implements Runnable{
         			negativo = Integer.parseInt( String.valueOf(binario.charAt(3) ) );
         			stavel = Integer.parseInt( String.valueOf(binario.charAt(2) ) );
         			saturada = Integer.parseInt( String.valueOf(binario.charAt(1) ) );
-        			
-        			if(stavel==1 && saturada==1) {
-            		//if(saturada==1) {
-        				if(negativo==1)
-        					display = formatData.formatDataAlfa(bufferReadAlfa); 
-        				else if(formatData.formatDataAlfa(bufferReadAlfa)<= MainApp.balancaVazia)
+        			if(Parametros.metodo == 1) {
+        				if(stavel==1 && saturada==1) {
+	            		//if(saturada==1) {
+	        				if(negativo==1)
+	        					display = formatData.formatDataAlfa(bufferReadAlfa); 
+	        				else if(formatData.formatDataAlfa(bufferReadAlfa)<= Parametros.pesoCorte)
+	        					display = formatData.formatDataAlfa(bufferReadAlfa);
+	    			    	synchronized (this) {
+	    			    		notify();
+	    			    		
+	    					}
+	        				
+	        			}
+        			}else if(Parametros.metodo == 2) {
+        				if(stavel==1 && saturada==1) {
         					display = formatData.formatDataAlfa(bufferReadAlfa);
-    			    	synchronized (this) {
-    			    		notify();
-    			    		
-    					}
-        				
+            				synchronized (this) {
+        			    		notify();    			    		
+        					}
+        					
+        				}else if(negativo==1 || formatData.formatDataAlfa(bufferReadAlfa) <= Parametros.pesoCorte){
+        					display = formatData.formatDataAlfa(bufferReadAlfa);
+            				synchronized (this) {
+        			    		notify();    			    		
+        					}
+        				}
         			}
+ 
                 	view.comunicacao.setText("OK");
                 	
                 }else view.comunicacao.setText("ReadOff");

@@ -30,50 +30,29 @@ public class MotoristaService {
 	
 	public List<Motorista> findAll(Motorista obj) {
 		List<Motorista> list = new ArrayList<>();	
-	
-		/*
-		if(obj.getPlaca()!=null && obj.getName()!= null && obj.getData()!=null) {
-			System.out.println("Entrou 1");
-			return repository.getByPlacaAndNameAndData(obj.getPlaca(), obj.getName(), obj.getData());			
-			
-		}else if(obj.getPlaca()!=null && obj.getName()!= null) {
-			System.out.println("Entrou 2");
-			return repository.getByPlacaAndName(obj.getPlaca(), obj.getName());
-			
-		}else if(obj.getData()!=null && obj.getName()!= null) {
-			System.out.println("Entrou 3");
-			return repository.getByDataAndName(obj.getData(), obj.getName());			
-			
-		}else if(obj.getPlaca()!=null && obj.getData()!=null) {
-			System.out.println("Entrou 4");
-			return repository.getByPlacaAndData(obj.getPlaca(),  obj.getData());
-			
 		
-		}else if(obj.getName()!= null) {
-			System.out.println("Entrou 5");
-			return repository.getByName(obj.getName());	
+		if( obj.getData()!= null && obj.getPlaca()!= null ) {
+			List<Motorista> listData =  repository.getByData(obj.getData() );
+			for(Motorista objData: listData) {
+				if( objData.getPlaca().equalsIgnoreCase( obj.getPlaca() ) ){
+					list.add(objData);
+				}
+			}
+			return list;
 			
-		
-		
-		
-		}else if(obj.getPlaca()!= null) {
-			System.out.println("Entrou 6");
-			return repository.getByPlaca(obj.getPlaca());	
-			
-		}else if(obj.getData()!= null) {
-			System.out.println("Entrou 7");
-			return repository.getByData(obj.getData());	
-			
-		}			
-		;*/
-		if(obj.getData()!= null) {
-			//System.out.println("Entrou 7");
-			list.addAll( repository.getByData(obj.getData()) );	
+		}else {
+			if(obj.getData()!= null) {
+				//System.out.println("Entrou 7");
+				list.addAll( repository.getByData(obj.getData()) );	
+				return list;
+			}
+			if(obj.getPlaca()!= null) {
+				//System.out.println("Entrou 6");
+				list.addAll( repository.getByPlaca(obj.getPlaca()) );
+				return list;
+			}
 		}
-		if(obj.getPlaca()!= null) {
-			//System.out.println("Entrou 6");
-			list.addAll( repository.getByPlaca(obj.getPlaca()) );
-		}
+
 		return list;
 	}
 

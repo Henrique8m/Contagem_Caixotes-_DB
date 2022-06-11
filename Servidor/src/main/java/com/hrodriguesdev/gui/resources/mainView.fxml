@@ -20,7 +20,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="600.0" minWidth="1000.0" prefHeight="1020.0" prefWidth="1980.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane minHeight="600.0" minWidth="1000.0" onKeyPressed="#config" prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <tabs>
@@ -269,6 +269,17 @@
                                     <Button mnemonicParsing="false" onAction="#gerarPDF" prefHeight="43.0" prefWidth="254.0" style="-fx-cursor: hand; -fx-background-radius: 10;" text="Gerar Relatorio PDF">
                                        <graphic>
                                           <ImageView fx:id="pdf" fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true" />
+                                       </graphic>
+                                       <font>
+                                          <Font size="15.0" />
+                                       </font>
+                                       <VBox.margin>
+                                          <Insets bottom="40.0" left="15.0" />
+                                       </VBox.margin>
+                                    </Button>
+                                    <Button mnemonicParsing="false" onAction="#gerarPDFDia" prefHeight="43.0" prefWidth="254.0" style="-fx-cursor: hand; -fx-background-radius: 10;" text="Gerar Relatorio PDF Dia">
+                                       <graphic>
+                                          <ImageView fx:id="pdf1" fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true" />
                                        </graphic>
                                        <font>
                                           <Font size="15.0" />

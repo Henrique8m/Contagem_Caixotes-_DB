@@ -25,12 +25,16 @@ public class MotoristaRepository {
 			st = conn.createStatement();			
 			rs = st.executeQuery("SELECT * FROM carvaodb.tb_motorista;");
 			
-			int i=0;
-			while (rs.next() && i<10) {
-				i++;
-				list.add(parseMotorista(rs));
-			}
+			int i=0;			
+			while ( rs.next() ) {
 				
+			}			
+			while (rs.previous() && i<10) {				
+				if(rs.getBoolean("fila") == false){
+					i++;
+					list.add(parseMotorista(rs));
+				}				
+			}				
 		}
 		catch (SQLException e) {
 			e.printStackTrace();
@@ -158,7 +162,7 @@ public class MotoristaRepository {
 			rs = st.executeQuery("SELECT * FROM carvaodb.tb_motorista;");			
 			
 			while (rs.next())  
-				if( rs.getString("placa").equalsIgnoreCase(placa))
+				if( rs.getString("placa").equalsIgnoreCase(placa) && rs.getBoolean("fila")==false )
 					list.add(parseMotorista(rs));	
 			
 		}
@@ -185,7 +189,7 @@ public class MotoristaRepository {
 			rs = st.executeQuery("SELECT * FROM carvaodb.tb_motorista;");			
 			
 			while (rs.next())  
-				if( rs.getString("data").equalsIgnoreCase(data))
+				if( rs.getString("data").equalsIgnoreCase(data) && rs.getBoolean("fila")==false )
 					list.add(parseMotorista(rs));	
 			
 		}

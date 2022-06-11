@@ -15,28 +15,55 @@ import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfWriter;
 
 public class GeneratorPDF {
-	
-	private String caminho = MainApp.caminhoPDF;
-	//C:\\Users\\henri\\Desktop\\PDF teste.pdf
 	private Document document;
 	private Paragraph paragraph;
 	private String nome, placa, cidade, estado, telefone;
 	private double pesoTotal;
 	
-	public Boolean newDocument(Motorista motoristaPDF, List<Pesagem> listPDF) {
+	public Boolean newDocument(Motorista motoristaPDF, List<Pesagem> listPDF, int diretorio) {
 		document = new Document();
-		pesoTotal = 0d;
-		File file = new File(caminho);	
+		pesoTotal = 0d;				
+		String data = motoristaPDF.getData();
+		data = data.replaceAll("/", "-");	
+		
+		String local = System.getProperty("user.home")
+						.toString() + 
+						MainApp.caminhoPDF;
+		try {
+			File diretorio1 = new File(local);
+			diretorio1.mkdir();
+			if(diretorio == 2) {
+				File diretorio2 = new File(local + 
+						"\\" +
+						data);
+				diretorio2.mkdir();
+				local = local + 
+						"\\" +
+						data; 
+			}
+		}catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}	
+
+		String caminho = local + 
+				"\\" + 
+				motoristaPDF.getPlaca() +
+				"    " + 
+				data +
+				".pdf";
+		
+		File file = new File(caminho);		
 		if(file.exists()) {
 			file.delete();
 		}
 
 		try { 
-		   	PdfWriter.getInstance(document, new FileOutputStream(caminho));
+		   	PdfWriter.getInstance(document, new FileOutputStream(caminho) );
 	    	document.open();
-	    	document.addTitle("Relatório de Pesagem");
+	    	document.addTitle("Relatorio de Pesagem");
 	    	
-        	paragraph = new Paragraph("Relatório de Pesagem");
+        	paragraph = new Paragraph("Relatorio de Pesagem");
     		paragraph.setAlignment(Element.ALIGN_CENTER);    		
     		document.add(paragraph);
     		
@@ -108,15 +135,58 @@ public class GeneratorPDF {
 		return "Peso Total: " + total + "Kg " + "\n" + "Numero de Caixotes = " + size; 
 	}
 	
-	public String getCaminho() {
-		return caminho;
-	}
-
-	public void setCaminho(String caminho) {
-		this.caminho = caminho;
-	}
+	String[] letters = new String[]{ "A", "B", "D", "E", "F", "G", "H", "I"};
+	File[] drives = new File[letters.length];
+	boolean[] isDrive = new boolean[letters.length];
+//  private static final String command = "wmic logicaldisk get name";   
 	
+	public void checkUsbVolume() {
+//        try {
+//        	Process SerialNumberProcess = Runtime.getRuntime().exec(command);
+//        	InputStreamReader ISR = new InputStreamReader(SerialNumberProcess.getInputStream());
+//        	BufferedReader br = new BufferedReader(ISR);
+//        	String items = br.readLine();    		
+//			while(items != null) {	
+//				System.out.println(items);
+//				items = br.readLine();
+//			}	
+//		  	
+//        	SerialNumberProcess.waitFor();
+//        	br.close();
+//        }catch (Exception e) {
+//        	e.printStackTrace();
+//
+//        }
+	
+		// init the file objects and the initial drive state
+		for ( int i = 0; i < letters.length; ++i )
+			{
+			drives[i] = new File(letters[i]+":");
+		
+			 isDrive[i] = drives[i].canRead();
+			// isDrive[i] = drives[i].canWrite();
+		}
+	
+		 System.out.println("FindDrive: waiting for devices...");
+	
+	    for ( int i = 0; i < letters.length; ++i ){
+	        boolean pluggedIn = drives[i].canRead();
+	
+	        // if the state has changed output a message
+
+	            if ( pluggedIn )
+	                System.out.println("Drive "+letters[i]+" has been plugged in");
+	            else
+	                System.out.println("Drive "+letters[i]+" has been unplugged");
+	    }
+	}
+      
+
+	
+
 }
+
+
 
 
 /*

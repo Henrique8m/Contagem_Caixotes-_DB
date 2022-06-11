@@ -2,6 +2,7 @@ package com.hrodriguesdev.controller;
 
 import com.hrodriguesdev.MainApp;
 import com.hrodriguesdev.serial.controller.SerialController;
+import com.hrodriguesdev.serial.properties.Parametros;
 
 
 public class PesagemController extends Thread {
@@ -14,6 +15,7 @@ public class PesagemController extends Thread {
 	private Double valueStabilized;
 	private Double oldValue = 0d;
 	private Boolean auxSave = false;
+	private Boolean auxSaveMetodo2 = false;
 	private Boolean estabilized = false;
 	private Double rascunho;
 	
@@ -30,7 +32,6 @@ public class PesagemController extends Thread {
 				try {
 					controller.wait();
 					toCompare( controller.getDisplay() );
-					//System.out.println( controller.getDisplay() ); 
 					
 				} catch (InterruptedException e1) {
 					e1.printStackTrace();
@@ -42,29 +43,44 @@ public class PesagemController extends Thread {
 	
 	private void toCompare( Double newValue ) {
 		try {
-			Double bordaDeSubida = MainApp.bordaDeSubida;
-			Double balancaVazia = MainApp.balancaVazia;
+			Double bordaDeSubida = Parametros.bordaDeSubida;
+			Double balancaVazia = Parametros.pesoCorte;
+			
+
+			
 			if(newValue > balancaVazia) {
+				
 				estabilized = valuestabilized(newValue);
+				
 				if(newValue > (oldValue + bordaDeSubida) && !estabilized) {	
 					oldValue = newValue;
 					rascunho = newValue;
-					auxSave = true;				
-					System.out.println("newValue > (oldValue + bordaDeSubida) && newValue > 500d  == " + newValue + 
-							"\nestabilizado? " + estabilized + "\nValor estabilizado = " + valueStabilized);
+					if(Parametros.metodo == 1) {
+						auxSave = true;	
+					}else {
+						auxSaveMetodo2 = true;
+					}
+//					System.out.println("newValue > (oldValue + bordaDeSubida) && newValue > 500d  == " + newValue + 
+//							"\nestabilizado? " + estabilized + "\nValor estabilizado = " + valueStabilized);
 										
 				}
 				
-			}else if( newValue < balancaVazia && newValue >= 0d && auxSave ) {
+			}
+			
+			if(auxSaveMetodo2 && Parametros.metodo == 2 && newValue > Parametros.pesoSemCarrinho) {
+				auxSave = true;	
+			}
+			
+			if( newValue < balancaVazia && newValue >= 0d && auxSave ) {
 				filtroDownSave++;
-				if(filtroDownSave >= 2 ) {
+				if(filtroDownSave >= Parametros.confirmacao ) {
 					if(estabilized) {
 						MainApp.viewController.addPesagem(valueStabilized);	
-						System.out.println("Balanca esvaziou e salvou o peso estabilizado de " + valueStabilized + " Kilos");
+//						System.out.println("Balanca esvaziou e salvou o peso estabilizado de " + valueStabilized + " Kilos");
 						
 					}else {
 						MainApp.viewController.addPesagem(rascunho);						
-						System.out.println("Balanca esvaziou e salvou o rascunho de " + rascunho + " Kilos");
+//						System.out.println("Balanca esvaziou e salvou o rascunho de " + rascunho + " Kilos");
 						
 					}
 					filtroDownSave = 0;
@@ -90,7 +106,7 @@ public class PesagemController extends Thread {
 		//
 		if( valueStabilized >( newValue - 3.0 ) && valueStabilized <( newValue + 3.0 ) ) {
 			valueStabilized = newValue;
-			if(filtro >= MainApp.filtroBalancaEstabilizada) {
+			if(filtro >= Parametros.bordaDeSubida) {
 				filtroDown = 0;
 				return true;
 				

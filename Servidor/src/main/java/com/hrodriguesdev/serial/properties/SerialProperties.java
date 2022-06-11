@@ -49,7 +49,7 @@ public class SerialProperties {
 				if(!line[2].isEmpty())
 					porta =line[2] ;
 				
-				System.out.println(baud + "\n" + stopBits + "\n" + porta);
+//				System.out.println(baud + "\n" + stopBits + "\n" + porta);
 				
 	    	}catch (IOException e) {
 				System.out.println(e.getMessage());

@@ -51,7 +51,7 @@ public class MainViewController implements Initializable{
 	private List<Pesagem> listPDF = new ArrayList<>();
 	private Motorista motoristaPDF;
 	@FXML
-	private ImageView logoYgg, logo, save, seta, seta1, adcionar, home, buscar, buscar1, pdf;
+	private ImageView logoYgg, logo, save, seta, seta1, adcionar, home, buscar, buscar1, pdf, pdf1;
 	//Tabela fila de motoristas
 
 	@FXML
@@ -91,6 +91,38 @@ public class MainViewController implements Initializable{
     	NewView.getNewViewModal("Cadastro de Motorista", (Pane) NewView.loadFXML("addMotoristaView", MainApp.viewaddMotorista), LoadViewController.getStage());
     	
     }
+    
+	
+	@FXML
+	public void config(KeyEvent event) {
+
+		if(event.getCode().toString() == "F5" ) {
+			try {
+				NewView.getNewViewModal("Cadastro de Motorista", 
+						(Pane) NewView.loadFXML("configuration", new ConfigurationViewController()),
+						LoadViewController.getStage());
+			} catch (IOException e) {
+				Alerts.showAlert("IOException", "", e.getMessage(), AlertType.ERROR);
+				e.printStackTrace();
+			}
+	    	
+//			if(event.getTarget().equals(data1)){
+//				data1.setText(Format.replaceData(data1.getText()));
+//				data1.end();	
+//				
+//			}else if(event.getTarget().equals(placa3)){
+//				placa3.setText(Format.replacePlaca(placa3.getText()));
+//				placa3.end();	
+//			}else if(event.getTarget().equals(name1)){
+//				String input = name1.getText().toUpperCase();
+//				input = input.replaceAll("[^A-Z-' ']+", "");			
+//				name1.setText(input);
+//				name1.end();
+//			}
+		}
+	
+	}
+	
     
     @FXML
     private void iniciarPesagem(ActionEvent e) throws IOException {
@@ -137,14 +169,14 @@ public class MainViewController implements Initializable{
     		ObservableList<Pesagem> obs = tablePesoCarvao.getItems();
     		if( !controller.updateMotorista(motorista.getId())) {
     			Alerts.showAlert("Error", "Erro ao atualizar o banco de dados!! ",
-    					"Não conseguil tirar o motorista da fila de pesagem.", AlertType.ERROR);
+    					"Nao conseguil tirar o motorista da fila de pesagem.", AlertType.ERROR);
     		}
     		
     		if(obs.size()>0) {    		
     			for(Pesagem p: obs) {
     				if(!controller.editMotoristaDaPesagem(p.getId(), motorista.getId())) {
     	    			Alerts.showAlert("Error", "Erro ao atualizar o banco de dados!! ",
-    	    					"Não conseguil tirar a pesagem da fila.", AlertType.ERROR);
+    	    					"Nao conseguil tirar a pesagem da fila.", AlertType.ERROR);
     					return;
     				}
     			}    	
@@ -156,13 +188,27 @@ public class MainViewController implements Initializable{
 		    	name.setText("");    		
 		    	placa2.setText("");
 		    	descarregando=false;
-    			
+		    	
+				listPDF = new ArrayList<>();
+				listPDF.addAll(obs);
+				
+				
+				if(!generator.newDocument(motorista, listPDF, 1) ) {
+					Alerts.showAlert("Documento ", "",
+							"Nao foi possiver criar o documento", AlertType.ERROR);
+				}else {
+					Alerts.showAlert("Documento ", "Relatorio criado com sucesso!! ",
+							"Diretorio = " + MainApp.caminhoPDF , AlertType.INFORMATION);
+				}
+				 
+			    	
+	    			
     		}else {
-    			Alerts.showAlert("Operação", "A lista de pesagem esta nula!! ",
+    			Alerts.showAlert("Operacao", "A lista de pesagem esta nula!! ",
     					"Somente finaliza se tiver peso", AlertType.ERROR);
     		}
     	}else {
-			Alerts.showAlert("Operação", "Não tem caminhao descarregando ",
+			Alerts.showAlert("Operacao", "Nao tem caminhao descarregando ",
 					"", AlertType.ERROR);
     	}
     }    
@@ -225,6 +271,7 @@ public class MainViewController implements Initializable{
     	 tableMotoristaFind.setItems(obsListTableViewMotoristaFind);
     }
     
+	
 	@FXML
 	public void format(KeyEvent event) {
 		if(event.getCode().toString() != "BACK_SPACE" || event.getCode().toString() != "LEFT" ) {
@@ -267,17 +314,41 @@ public class MainViewController implements Initializable{
 	@FXML
     private void gerarPDF(ActionEvent e) throws IOException {
 		if(motoristaPDF != null) {
-			if(!generator.newDocument(motoristaPDF, listPDF) ) {
+			if(!generator.newDocument(motoristaPDF, listPDF, 1) ) {
 				Alerts.showAlert("Documento ", "Não foi possiver criar o documento ",
 						"", AlertType.ERROR);
 			}else {
-				String caminho = "E:\\Javas\\Java";
 				Alerts.showAlert("Documento ", "Relatorio criado com sucesso!! ",
-						"Diretorio = " + caminho , AlertType.INFORMATION);
+						"Diretorio = " + MainApp.caminhoPDF , AlertType.INFORMATION);
 			}
 		}    	
     	
     }
+	
+	@FXML
+    private void gerarPDFDia(ActionEvent e) throws IOException {
+		long motoristaid;
+		if( obsListTableViewMotoristaFind.size() > 0 ) {
+			ObservableList<Pesagem> pesagem;
+			for(Motorista motorista: obsListTableViewMotoristaFind) {				
+				motoristaid =motorista.getId();
+				motoristaPDF = controller.getMotoristaById(motoristaid);
+				pesagem = controller.getPesagemByMotoristaId(motoristaid);
+				if(pesagem != null) {
+					listPDF = new ArrayList<>();
+					listPDF.addAll(pesagem);
+				}
+				if(!generator.newDocument(motoristaPDF, listPDF, 2) ) {
+					Alerts.showAlert("Documento ", "Nao foi possiver criar o documento ",
+							"", AlertType.ERROR);
+				}else {
+					Alerts.showAlert("Documento ", "Relatorio criado com sucesso!! ",
+							"Diretorio = " + MainApp.caminhoPDF , AlertType.INFORMATION);
+				}				
+				
+			}
+		}
+   }
 	
 	
 //----------------------------------------------------------------------------------------------------------------------
@@ -314,6 +385,7 @@ public class MainViewController implements Initializable{
 		buscar1.setImage(image);
 		image = new Image(MainApp.class.getResource("gui/resources/icons-pdf.png").toString() );
 		pdf.setImage(image);
+		pdf1.setImage(image);
 		 
 		 
 		

@@ -28,20 +28,22 @@ public class MainApp extends Application implements Runnable{
 	
 
 	
-	public static String caminhoPDF = "C:\\Users\\Usuario\\Desktop\\Carvao.pdf";
+	public static String caminhoPDF = "\\Desktop\\Relatorios";
+
+	
 	public static String caminhoDbProperties = "C:\\Program Files\\Java\\resources\\db.properties";
 	public static String properties = "Properties.properties";
+	public static String Params = "Params.properties";
+	
 	public static String diretorioStr1 = "\\AppData\\Local\\YggDrasil";
 	public static String diretorioStr2 = "\\AppData\\Local\\YggDrasil\\serial";
 	
 	
-	public static double bordaDeSubida = 5.0d;
 	public static double pesomaior = 0d;
-	public static double balancaVazia = 30.0d;
+
 	public static int filtroBalancaEstabilizada = 3;
 	public static int filtroBalancaEsPesoDescendo = 2;
-	
-	public static int timeOutSerial = 500;
+
 	public static Integer dataSpired = 20230601;
 	
 	public static MainViewController viewController = new MainViewController();

@@ -6,6 +6,7 @@ import java.io.OutputStream;
 import javax.comm.SerialPort;
 
 import com.hrodriguesdev.MainApp;
+import com.hrodriguesdev.serial.properties.Parametros;
 
 public class WriteGenericData {	
 	private OutputStream saida;
@@ -16,7 +17,7 @@ public class WriteGenericData {
 		//Padrao do bufer = 8
 		//Indicadores alfa = 27
 		try {
-			Thread.sleep(MainApp.timeOutSerial);
+			Thread.sleep(Parametros.deley);
 			serialPort.setOutputBufferSize(BufferSize);
 			saida = serialPort.getOutputStream();
 			saida.write(bufferWrite);
