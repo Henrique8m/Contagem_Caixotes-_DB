@@ -25,6 +25,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -92,7 +93,6 @@ public class MainViewController implements Initializable{
     	
     }
     
-	
 	@FXML
 	public void config(KeyEvent event) {
 
@@ -105,25 +105,11 @@ public class MainViewController implements Initializable{
 				Alerts.showAlert("IOException", "", e.getMessage(), AlertType.ERROR);
 				e.printStackTrace();
 			}
-	    	
-//			if(event.getTarget().equals(data1)){
-//				data1.setText(Format.replaceData(data1.getText()));
-//				data1.end();	
-//				
-//			}else if(event.getTarget().equals(placa3)){
-//				placa3.setText(Format.replacePlaca(placa3.getText()));
-//				placa3.end();	
-//			}else if(event.getTarget().equals(name1)){
-//				String input = name1.getText().toUpperCase();
-//				input = input.replaceAll("[^A-Z-' ']+", "");			
-//				name1.setText(input);
-//				name1.end();
-//			}
+
 		}
 	
 	}
 	
-    
     @FXML
     private void iniciarPesagem(ActionEvent e) throws IOException {
 		String bug = "bug";
@@ -170,8 +156,8 @@ public class MainViewController implements Initializable{
     		if( !controller.updateMotorista(motorista.getId())) {
     			Alerts.showAlert("Error", "Erro ao atualizar o banco de dados!! ",
     					"Nao conseguil tirar o motorista da fila de pesagem.", AlertType.ERROR);
-    		}
-    		
+    		return;
+    		}    		
     		if(obs.size()>0) {    		
     			for(Pesagem p: obs) {
     				if(!controller.editMotoristaDaPesagem(p.getId(), motorista.getId())) {
@@ -183,25 +169,29 @@ public class MainViewController implements Initializable{
 	    		totalPeso = 0d;
 	    		caixotes.setText("0");
 	    		pesoDescarregando.setText("0");
+	    		listPDF = new ArrayList<>();
+				listPDF.addAll(obs);	    		
 		    	obsListTableCarvao.removeAll(obs);
 		    	tablePesoCarvao.refresh();
 		    	name.setText("");    		
 		    	placa2.setText("");
 		    	descarregando=false;
 		    	
-				listPDF = new ArrayList<>();
-				listPDF.addAll(obs);
+
 				
 				
 				if(!generator.newDocument(motorista, listPDF, 1) ) {
 					Alerts.showAlert("Documento ", "",
 							"Nao foi possiver criar o documento", AlertType.ERROR);
-				}else {
+				}else if( generator.copyPDF() ){
 					Alerts.showAlert("Documento ", "Relatorio criado com sucesso!! ",
-							"Diretorio = " + MainApp.caminhoPDF , AlertType.INFORMATION);
-				}
-				 
-			    	
+							"Diretorio = " + generator.getCaminho() , AlertType.INFORMATION);
+					
+				}else
+				{
+					Alerts.showAlert("USB ", "",
+							"Falha ao copiar arquivo para a unidade USB  " , AlertType.INFORMATION);
+				}		    	
 	    			
     		}else {
     			Alerts.showAlert("Operacao", "A lista de pesagem esta nula!! ",
@@ -216,7 +206,7 @@ public class MainViewController implements Initializable{
 	
 	
 	
-	//------------------------------------- Página de Busca --------------------------------------------------------
+	//------------------------------------- Pagina de Busca --------------------------------------------------------
 	
 	@FXML
 	private TableColumn<Motorista, String> nomeMotorista1;
@@ -245,15 +235,14 @@ public class MainViewController implements Initializable{
     
     
     @FXML
-    private TextField name1, data1, placa3;
+    private TextField data1, placa3;
+    @FXML 
+    private CheckBox copiasPendriver;
 
     
 	@FXML
     private void buscar(ActionEvent e) throws IOException {
     	Motorista obj = new Motorista();
-    	if( !name1.getText().isEmpty() ) {
-    		obj.setName(name1.getText());
-    	}
     	if( !placa3.getText().isEmpty() ) {
     		obj.setPlaca(placa3.getText());
     	}
@@ -282,11 +271,6 @@ public class MainViewController implements Initializable{
 			}else if(event.getTarget().equals(placa3)){
 				placa3.setText(Format.replacePlaca(placa3.getText()));
 				placa3.end();	
-			}else if(event.getTarget().equals(name1)){
-				String input = name1.getText().toUpperCase();
-				input = input.replaceAll("[^A-Z-' ']+", "");			
-				name1.setText(input);
-				name1.end();
 			}
 		}
 	
@@ -317,9 +301,17 @@ public class MainViewController implements Initializable{
 			if(!generator.newDocument(motoristaPDF, listPDF, 1) ) {
 				Alerts.showAlert("Documento ", "Não foi possiver criar o documento ",
 						"", AlertType.ERROR);
-			}else {
-				Alerts.showAlert("Documento ", "Relatorio criado com sucesso!! ",
-						"Diretorio = " + MainApp.caminhoPDF , AlertType.INFORMATION);
+			}else if( copiasPendriver.isSelected() ) 
+			{
+				if( generator.copyPDF() ) 
+				{					
+					Alerts.showAlert("Documento ", "Relatorio criado com sucesso!! ",
+							"Diretorio = " + generator.getCaminho() , AlertType.INFORMATION);
+				}else
+				{
+					Alerts.showAlert("USB ", "",
+							"Falha ao copiar arquivo para a unidade USB  " , AlertType.INFORMATION);
+				}	
 			}
 		}    	
     	
@@ -341,10 +333,18 @@ public class MainViewController implements Initializable{
 				if(!generator.newDocument(motoristaPDF, listPDF, 2) ) {
 					Alerts.showAlert("Documento ", "Nao foi possiver criar o documento ",
 							"", AlertType.ERROR);
-				}else {
-					Alerts.showAlert("Documento ", "Relatorio criado com sucesso!! ",
-							"Diretorio = " + MainApp.caminhoPDF , AlertType.INFORMATION);
-				}				
+				}else if( copiasPendriver.isSelected() ) 
+				{
+					if( generator.copyPDF() ) 
+					{					
+						Alerts.showAlert("Documento ", "Relatorio criado com sucesso!! ",
+								"Diretorio = " + generator.getCaminho() , AlertType.INFORMATION);
+					}else
+					{
+						Alerts.showAlert("USB ", "",
+								"Falha ao copiar arquivo para a unidade USB  " , AlertType.INFORMATION);
+					}	
+				}		
 				
 			}
 		}

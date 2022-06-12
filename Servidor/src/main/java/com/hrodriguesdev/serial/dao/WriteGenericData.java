@@ -5,7 +5,6 @@ import java.io.OutputStream;
 
 import javax.comm.SerialPort;
 
-import com.hrodriguesdev.MainApp;
 import com.hrodriguesdev.serial.properties.Parametros;
 
 public class WriteGenericData {	

@@ -3,6 +3,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.geometry.Rectangle2D?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TableColumn?>
@@ -263,21 +264,29 @@
                                           <Font size="15.0" />
                                        </font>
                                        <VBox.margin>
-                                          <Insets bottom="40.0" left="15.0" />
+                                          <Insets bottom="20.0" left="15.0" />
                                        </VBox.margin>
                                     </Button>
-                                    <Button mnemonicParsing="false" onAction="#gerarPDF" prefHeight="43.0" prefWidth="254.0" style="-fx-cursor: hand; -fx-background-radius: 10;" text="Gerar Relatorio PDF">
+                                    <CheckBox fx:id="copiasPendriver" mnemonicParsing="false" prefHeight="22.0" prefWidth="212.0" style="-fx-border-color: #696969;" text="Fazer Copias no PENDRIVER">
+                                       <VBox.margin>
+                                          <Insets bottom="20.0" left="15.0" />
+                                       </VBox.margin>
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </CheckBox>
+                                    <Button mnemonicParsing="false" onAction="#gerarPDF" prefHeight="69.0" prefWidth="215.0" style="-fx-cursor: hand; -fx-background-radius: 10;" text="Gerar Relatorio PDF&#10;Somente do &#10;Selecionado&#10;">
                                        <graphic>
                                           <ImageView fx:id="pdf" fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true" />
                                        </graphic>
+                                       <VBox.margin>
+                                          <Insets bottom="20.0" left="15.0" />
+                                       </VBox.margin>
                                        <font>
                                           <Font size="15.0" />
                                        </font>
-                                       <VBox.margin>
-                                          <Insets bottom="40.0" left="15.0" />
-                                       </VBox.margin>
                                     </Button>
-                                    <Button mnemonicParsing="false" onAction="#gerarPDFDia" prefHeight="43.0" prefWidth="254.0" style="-fx-cursor: hand; -fx-background-radius: 10;" text="Gerar Relatorio PDF Dia">
+                                    <Button mnemonicParsing="false" onAction="#gerarPDFDia" prefHeight="58.0" prefWidth="215.0" style="-fx-cursor: hand; -fx-background-radius: 10;" text="Gerar Relatorio PDF&#10;da lista inteira">
                                        <graphic>
                                           <ImageView fx:id="pdf1" fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true" />
                                        </graphic>
@@ -285,9 +294,14 @@
                                           <Font size="15.0" />
                                        </font>
                                        <VBox.margin>
-                                          <Insets left="15.0" />
+                                          <Insets bottom="15.0" left="15.0" />
                                        </VBox.margin>
                                     </Button>
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Marque o CheckBox &#10;(Fazer copias no pendriver)&#10;e seus relatorios ja vão ser &#10;copiados para ele.&#10;" textAlignment="CENTER">
+                                       <font>
+                                          <Font name="Comic Sans MS" size="18.0" />
+                                       </font>
+                                    </Text>
                                  </children>
                                  <padding>
                                     <Insets left="10.0" right="10.0" top="20.0" />
@@ -306,12 +320,6 @@
                                     </HBox>
                                     <HBox alignment="CENTER" minHeight="50.0" prefHeight="70.0" prefWidth="800.0" style="-fx-background-color: #c9c9c9;">
                                        <children>
-                                          <VBox style="-fx-background-color: #c9c9c9;">
-                                             <children>
-                                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="NOME DO MOTORISTA" wrappingWidth="137.13671875" />
-                                                <TextField fx:id="name1" onKeyReleased="#format" prefHeight="25.0" />
-                                             </children>
-                                          </VBox>
                                           <VBox>
                                              <children>
                                                 <Text strokeType="OUTSIDE" strokeWidth="0.0" text="DATA" wrappingWidth="39.13671875" />

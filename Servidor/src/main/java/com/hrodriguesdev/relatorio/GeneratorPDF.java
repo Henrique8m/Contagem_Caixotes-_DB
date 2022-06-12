@@ -3,6 +3,9 @@ package com.hrodriguesdev.relatorio;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.FileAlreadyExistsException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.List;
 
 import com.hrodriguesdev.MainApp;
@@ -15,16 +18,23 @@ import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfWriter;
 
 public class GeneratorPDF {
+	private String caminho,nameArquivo, data;
+	private int diretorio;
 	private Document document;
 	private Paragraph paragraph;
 	private String nome, placa, cidade, estado, telefone;
 	private double pesoTotal;
 	
+	String[] letters = new String[]{ "A:", "B:", "D:", "E:", "F:", "G:", "H:", "I:"};
+	File[] drives = new File[letters.length];
+	boolean[] isDrive = new boolean[letters.length];
+		
 	public Boolean newDocument(Motorista motoristaPDF, List<Pesagem> listPDF, int diretorio) {
+		this.diretorio = diretorio;
 		document = new Document();
 		pesoTotal = 0d;				
-		String data = motoristaPDF.getData();
-		data = data.replaceAll("/", "-");	
+		data = motoristaPDF.getData();
+		this.data = data.replaceAll("/", "-");	
 		
 		String local = System.getProperty("user.home")
 						.toString() + 
@@ -33,25 +43,26 @@ public class GeneratorPDF {
 			File diretorio1 = new File(local);
 			diretorio1.mkdir();
 			if(diretorio == 2) {
-				File diretorio2 = new File(local + 
-						"\\" +
-						data);
-				diretorio2.mkdir();
 				local = local + 
 						"\\" +
-						data; 
+						data; 				
+				
+				File diretorio2 = new File(local);
+				diretorio2.mkdir();
+
 			}
 		}catch (Exception e) {
 			e.printStackTrace();
 			return null;
 		}	
 
-		String caminho = local + 
-				"\\" + 
-				motoristaPDF.getPlaca() +
-				"    " + 
-				data +
-				".pdf";
+		nameArquivo = "\\" + 
+						motoristaPDF.getPlaca() +
+						"    " + 
+						data +
+						".pdf";
+		caminho = local + 
+				nameArquivo;
 		
 		File file = new File(caminho);		
 		if(file.exists()) {
@@ -135,12 +146,70 @@ public class GeneratorPDF {
 		return "Peso Total: " + total + "Kg " + "\n" + "Numero de Caixotes = " + size; 
 	}
 	
-	String[] letters = new String[]{ "A", "B", "D", "E", "F", "G", "H", "I"};
-	File[] drives = new File[letters.length];
-	boolean[] isDrive = new boolean[letters.length];
-//  private static final String command = "wmic logicaldisk get name";   
+	public boolean copyPDF() {
+	    for ( int i = 0; i < letters.length; ++i ){
+			drives[i] = new File(letters[i]);		    	
+	        boolean pluggedIn = drives[i].canRead();
+	        if ( pluggedIn ) 
+	        {        	
+	    		try 
+	    		{
+	    			if( diretorio == 2 ) 
+	    			{
+	    				File newDiretorio = new File(letters[i] + "\\" + this.data);
+	    				newDiretorio.mkdir();
+	    				Files.copy(Paths.get( caminho ), Paths.get( letters[i] + "\\" + this.data + "\\"+ nameArquivo ) );
+	    			}
+	    			else
+	    			{
+	    				Files.copy(Paths.get( caminho ), Paths.get( letters[i] + "\\" + nameArquivo ) );
+	    			}
+										
+					//System.out.println("Drive "+letters[i]+" has been plugged in");					
+					return true;
+				} 
+	    		catch (FileAlreadyExistsException e) 
+	    		{					
+					System.out.println("Arquivo já existe no pendriver");
+					return true;
+				} catch (IOException e) {
+					
+					e.printStackTrace();
+					return false;
+				}
+    
+	        }
+	        
+	    }
+	    return false;
+	}
+     
+	public String getCaminho() 
+	{
+		return caminho;
+	}
 	
-	public void checkUsbVolume() {
+	public void criarDiretorioUSB() {
+		
+	}
+	
+	
+}
+
+//
+//	            File file = new File("C:\\Users\\Mayank\\Desktop\\1.txt");
+//	              
+//	            // renaming the file and moving it to a new location
+//	            if(file.renameTo (new File("C:\\Users\\Mayank\\Desktop\\dest\\newFile.txt"))) {
+//	                file.delete();
+//	                System.out.println("File moved successfully");
+//	            }
+//	            else
+//	            {
+//	                System.out.println("Failed to move the file");
+//	        	}     
+
+//  private static final String command = "wmic logicaldisk get name";  
 //        try {
 //        	Process SerialNumberProcess = Runtime.getRuntime().exec(command);
 //        	InputStreamReader ISR = new InputStreamReader(SerialNumberProcess.getInputStream());
@@ -157,36 +226,6 @@ public class GeneratorPDF {
 //        	e.printStackTrace();
 //
 //        }
-	
-		// init the file objects and the initial drive state
-		for ( int i = 0; i < letters.length; ++i )
-			{
-			drives[i] = new File(letters[i]+":");
-		
-			 isDrive[i] = drives[i].canRead();
-			// isDrive[i] = drives[i].canWrite();
-		}
-	
-		 System.out.println("FindDrive: waiting for devices...");
-	
-	    for ( int i = 0; i < letters.length; ++i ){
-	        boolean pluggedIn = drives[i].canRead();
-	
-	        // if the state has changed output a message
-
-	            if ( pluggedIn )
-	                System.out.println("Drive "+letters[i]+" has been plugged in");
-	            else
-	                System.out.println("Drive "+letters[i]+" has been unplugged");
-	    }
-	}
-      
-
-	
-
-}
-
-
 
 
 /*
